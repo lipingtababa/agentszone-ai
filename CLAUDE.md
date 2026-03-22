@@ -1,53 +1,51 @@
 # CLAUDE.md — Agents 特区
 
-## What this project is
+## 这个项目是什么
 
-Community website for Agents 特区 (agentszone.ai) — the public-facing content hub for a practitioner community focused on AI agent management. Articles, author profiles, discussions, and event records.
+Agents 特区 (agentszone.ai) 的社区网站。对外展示社区产出的内容：文章、作者介绍、讨论、活动记录。
 
-## Community context
+## 社区背景
 
-- Members are AI practitioners from various industries (finance, healthcare, education, cloud, open source)
-- Most members are in WeChat groups where daily conversation happens
-- Regular Saturday evening online meeting via Tencent Meeting (商业版)
-  - Meetings can be free or paid
-  - Meetings can be internal (members only) or public-facing
-- Content is bilingual: Chinese (default) + English mirror
+- 成员来自各行各业的 AI 实践者（券商、医疗器械、教培、支付宝、腾讯云、开源基础设施等）
+- 大部分成员在微信群里日常交流
+- 每周六晚上有线上分享会，通过腾讯会议（商业版）进行
+  - 分享会可能免费或收费
+  - 可能仅限内部成员，也可能对外公开
+- 内容双语：中文为主，英文为镜像
 
-## Content workflow for each sharing session
+## 每次分享会的内容流程
 
-Each Saturday meeting typically produces:
+1. **会前** — 制作宣传海报、写预告文章、创建活动记录
+2. **对外发布** — 同步到知乎和/或微信公众号
+3. **会后** — 根据会议内容生成总结文章
+4. **视频** — 有时发布，不是每次都有
 
-1. **Before the meeting** — create a promotional post/article and event record
-2. **Publish externally** — cross-post to Zhihu (知乎) and/or WeChat public account (公众号)
-3. **After the meeting** — generate a summary article from the meeting content
-4. **Video** — sometimes published, not always
+## 各内容板块的定位
 
-## Content types and their purpose
+### 文章 (`src/content/articles/`)
+社区成员写的实践经验。怎么在团队里用 Agent、怎么管质量、怎么搭流程。鼓励成员写文章，通过 PR 提交。
 
-### Articles (`src/content/articles/`)
-Written by community members. Practitioner experience — how they use agents in real teams, quality control, process design. Members are encouraged to write and submit via PR.
+### 作者 (`src/content/authors/`)
+社区成员的公开自我介绍。一方面是社区身份，一方面是让外部人（可能是潜在客户或合作者）了解我们的人。鼓励每个贡献者都建一个 profile。
 
-### Authors (`src/content/authors/`)
-Community members introducing themselves to the public. This serves two purposes: community identity and visibility to potential customers or collaborators. Encourage every contributing member to create a profile.
+### 讨论 (`src/content/discussions/`)
+从社区对话中沉淀出来的关键概念。不是文章，是短而聚焦的概念页，关联到 Playbook 章节和相关文章。群聊中反复出现的主题，值得沉淀成一篇讨论。
 
-### Discussions (`src/content/discussions/`)
-Key concepts distilled from community conversations. These are not articles — they are short, focused concept pages linked to Playbook chapters and related articles. Encourage members to propose new concepts when recurring themes emerge in group chats.
+### 活动 (`src/content/events/`)
+每周六分享会的记录。包括分享人、话题、日期，可选海报图片。
 
-### Events (`src/content/events/`)
-Records of the Saturday sharing sessions. Include speaker info, topic, date, and optionally a poster image.
+### 海报生成器 (`/poster`, `/en/poster`)
+给活动做宣传海报的工具，每次分享会前用。
 
-### Poster generator (`/poster`, `/en/poster`)
-Tool for creating promotional posters for upcoming events. Used before each Saturday session.
+## 技术栈
 
-## Tech stack
+- Astro 5 静态站点，Tailwind CSS v4，部署在 Vercel
+- 内容是 Markdown，frontmatter 用 Zod schema 校验
+- `npm run build` 会校验所有内容的 schema
 
-- Astro 5 static site, Tailwind CSS v4, deployed on Vercel
-- Content is Markdown with Zod-validated frontmatter
-- `npm run build` validates all content schemas
+## 开发约定
 
-## Development conventions
-
-- Content files use kebab-case naming
-- Files prefixed with `_` are ignored by collections
-- Chinese content goes in `src/content/<collection>/`, English in `src/content/<collection>/en/`
-- See CONTRIBUTING.md for frontmatter schemas and submission instructions
+- 内容文件用 kebab-case 命名
+- `_` 开头的文件会被 collection 忽略
+- 中文内容放 `src/content/<collection>/`，英文放 `src/content/<collection>/en/`
+- 提交规范见 CONTRIBUTING.md
