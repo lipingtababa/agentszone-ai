@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DiscussionCard from '../../components/DiscussionCard.astro';
+
+const allDiscussions = await getCollection('discussions');
+const discussions = allDiscussions.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="讨论 | Agents 特区"
+  description="社区讨论中沉淀的关键概念"
+>
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+    讨论
+  </h1>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">社区讨论中沉淀的关键概念</p>
+  <div class="grid gap-6 sm:grid-cols-2">
+    {discussions.map((discussion) => (
+      <DiscussionCard discussion={discussion} />
+    ))}
+  </div>
+</BaseLayout>

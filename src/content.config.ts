@@ -64,4 +64,26 @@ const events = defineCollection({
   }),
 });
 
-export const collections = { articles, articlesEn, authors, authorsEn, events };
+const discussions = defineCollection({
+  loader: glob({ pattern: '[^_]*.md', base: 'src/content/discussions' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().max(300),
+    order: z.number(),
+    playbook_chapter: z.string().optional(),
+    related_articles: z.array(z.string()).optional(),
+  }),
+});
+
+const discussionsEn = defineCollection({
+  loader: glob({ pattern: '[^_]*.md', base: 'src/content/discussions/en' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().max(300),
+    order: z.number(),
+    playbook_chapter: z.string().optional(),
+    related_articles: z.array(z.string()).optional(),
+  }),
+});
+
+export const collections = { articles, articlesEn, authors, authorsEn, events, discussions, discussionsEn };

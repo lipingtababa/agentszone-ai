@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getLang, localePath } from '../i18n/utils';
+
+interface Props {
+  discussion: CollectionEntry<'discussions'> | CollectionEntry<'discussionsEn'>;
+}
+
+const { discussion } = Astro.props;
+const { title, description } = discussion.data;
+const lang = getLang(Astro.currentLocale);
+const href = localePath(lang, `/discussions/${discussion.id}`);
+---
+
+<article class="group rounded-xl border border-[var(--color-surface-border)] overflow-hidden glow-hover transition-all">
+  <a href={href} class="block px-5 py-5">
+    <h2 class="text-lg font-semibold text-[var(--color-text-primary)] transition-all">
+      <span class="hover-text-gradient">{title}</span>
+    </h2>
+    <p class="mt-2 text-sm text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">{description}</p>
+  </a>
+</article>

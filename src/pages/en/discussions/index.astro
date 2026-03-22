@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DiscussionCard from '../../../components/DiscussionCard.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const t = useTranslations('en');
+
+const allDiscussions = await getCollection('discussionsEn');
+const discussions = allDiscussions.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title={`${t('discussions.title')} | ${t('site.name')}`}
+  description={t('discussions.desc')}
+>
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+    {t('discussions.title')}
+  </h1>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">{t('discussions.desc')}</p>
+  <div class="grid gap-6 sm:grid-cols-2">
+    {discussions.map((discussion) => (
+      <DiscussionCard discussion={discussion} />
+    ))}
+  </div>
+</BaseLayout>

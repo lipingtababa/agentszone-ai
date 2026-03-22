@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+export async function getStaticPaths() {
+  const discussions = await getCollection('discussionsEn');
+  return discussions.map((discussion) => ({
+    params: { id: discussion.id },
+    props: { discussion },
+  }));
+}
+
+const t = useTranslations('en');
+const { discussion } = Astro.props;
+const { title, description, playbook_chapter } = discussion.data;
+const { Content } = await render(discussion);
+
+const playbookUrl = playbook_chapter
+  ? `https://github.com/lipingtababa/ai-native-engineering-playbook/blob/main/${playbook_chapter}.md`
+  : null;
+---
+
+<BaseLayout title={`${title} | ${t('site.name')}`} description={description}>
+  <article class="mx-auto max-w-2xl">
+    <header class="mb-12">
+      <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+        {title}
+      </h1>
+      <p class="mt-3 text-[var(--color-text-muted)]">{description}</p>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <footer class="mt-12 pt-8 border-t border-[var(--color-surface-border)]">
+      {playbookUrl && (
+        <a
+          href={playbookUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 text-sm text-[var(--color-accent)] hover:underline"
+        >
+          {t('discussions.playbook')} <span class="text-xs opacity-50">↗</span>
+        </a>
+      )}
+    </footer>
+  </article>
+</BaseLayout>
