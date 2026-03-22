@@ -1,10 +1,6 @@
-import React, { useState, useRef, useCallback } from "react";
-import { PosterPreview, type PosterData, type ContentItem } from "./PosterPreview";
+import React, { useState, useCallback } from "react";
+import { PosterPreview, type PosterData } from "./PosterPreview";
 import { toPng } from "html-to-image";
-
-interface Props {
-  lang: "zh" | "en";
-}
 
 const defaultData: PosterData = {
   forumTitle: "Agents特区论坛",
@@ -29,67 +25,7 @@ const defaultData: PosterData = {
   meetingId: "740 886 774",
 };
 
-const labels = {
-  zh: {
-    title: "海报生成器",
-    subtitle: "为 Agents特区论坛 活动生成海报",
-    forumTitle: "论坛名称",
-    episodeNumber: "期数",
-    posterTitle: "标题（换行用 \\n）",
-    description: "描述",
-    sectionContent: "本期内容",
-    tagLabel: "标签",
-    textLabel: "内容",
-    addItem: "+ 添加条目",
-    removeItem: "删除",
-    sectionSpeaker: "分享嘉宾",
-    sectionHost: "主持人（可选）",
-    enableHost: "添加主持人",
-    name: "姓名",
-    nameCn: "中文名（可选）",
-    personTitle: "职位/简介",
-    personSubtitle: "副标题（可选）",
-    photo: "照片",
-    sectionEvent: "活动信息",
-    date: "日期",
-    timezones: "时区信息",
-    meetingId: "会议号",
-    meetingQr: "会议二维码",
-    download: "下载海报 PNG",
-    downloading: "生成中...",
-  },
-  en: {
-    title: "Poster Generator",
-    subtitle: "Generate posters for Agents Zone Forum events",
-    forumTitle: "Forum Name",
-    episodeNumber: "Episode #",
-    posterTitle: "Title (use \\n for line breaks)",
-    description: "Description",
-    sectionContent: "Content Items",
-    tagLabel: "Tag",
-    textLabel: "Text",
-    addItem: "+ Add Item",
-    removeItem: "Remove",
-    sectionSpeaker: "Speaker",
-    sectionHost: "Host (Optional)",
-    enableHost: "Add Host",
-    name: "Name",
-    nameCn: "Chinese Name (optional)",
-    personTitle: "Title / Bio",
-    personSubtitle: "Subtitle (optional)",
-    photo: "Photo",
-    sectionEvent: "Event Info",
-    date: "Date",
-    timezones: "Timezone Info",
-    meetingId: "Meeting ID",
-    meetingQr: "Meeting QR Code",
-    download: "Download PNG",
-    downloading: "Generating...",
-  },
-};
-
-export const PosterGenerator: React.FC<Props> = ({ lang }) => {
-  const t = labels[lang];
+export const PosterGenerator: React.FC = () => {
   const [data, setData] = useState<PosterData>(defaultData);
   const [hasHost, setHasHost] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -99,64 +35,23 @@ export const PosterGenerator: React.FC<Props> = ({ lang }) => {
     []
   );
 
-  const updateSpeaker = useCallback(
-    (patch: Partial<PosterData["speaker"]>) =>
-      setData((d) => ({ ...d, speaker: { ...d.speaker, ...patch } })),
-    []
-  );
-
-  const updateHost = useCallback(
-    (patch: Partial<NonNullable<PosterData["host"]>>) =>
-      setData((d) => ({
-        ...d,
-        host: { ...(d.host || { name: "", title: "" }), ...patch },
-      })),
-    []
-  );
-
-  const updateContentItem = useCallback(
-    (index: number, patch: Partial<ContentItem>) =>
-      setData((d) => ({
-        ...d,
-        contentItems: d.contentItems.map((item, i) =>
-          i === index ? { ...item, ...patch } : item
-        ),
-      })),
-    []
-  );
-
-  const addContentItem = useCallback(
-    () =>
-      setData((d) => ({
-        ...d,
-        contentItems: [...d.contentItems, { tag: "", text: "" }],
-      })),
-    []
-  );
-
-  const removeContentItem = useCallback(
-    (index: number) =>
-      setData((d) => ({
-        ...d,
-        contentItems: d.contentItems.filter((_, i) => i !== index),
-      })),
-    []
-  );
-
   const handlePhotoUpload = useCallback(
     (target: "speaker" | "host", file: File) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
+        const url = e.target?.result as string;
         if (target === "speaker") {
-          updateSpeaker({ photo: dataUrl });
+          setData((d) => ({ ...d, speaker: { ...d.speaker, photo: url } }));
         } else {
-          updateHost({ photo: dataUrl });
+          setData((d) => ({
+            ...d,
+            host: { ...(d.host || { name: "", title: "" }), photo: url },
+          }));
         }
       };
       reader.readAsDataURL(file);
     },
-    [updateSpeaker, updateHost]
+    []
   );
 
   const handleQrUpload = useCallback(
@@ -175,7 +70,7 @@ export const PosterGenerator: React.FC<Props> = ({ lang }) => {
     if (!el) return;
     setDownloading(true);
     try {
-      const dataUrl = await toPng(el, {
+      const url = await toPng(el, {
         width: 1080,
         height: 1920,
         pixelRatio: 1,
@@ -183,38 +78,33 @@ export const PosterGenerator: React.FC<Props> = ({ lang }) => {
       });
       const link = document.createElement("a");
       link.download = `poster-ep${data.episodeNumber}.png`;
-      link.href = dataUrl;
+      link.href = url;
       link.click();
     } catch (err) {
       console.error("Failed to generate poster:", err);
-      alert("Failed to generate poster image. Please try again.");
     } finally {
       setDownloading(false);
     }
   }, [data.episodeNumber]);
 
-  const toggleHost = useCallback(() => {
-    setHasHost((v) => {
-      if (!v) {
-        setData((d) => ({
-          ...d,
-          host: { name: "", title: "" },
-        }));
-      } else {
-        setData((d) => ({ ...d, host: undefined }));
-      }
-      return !v;
-    });
-  }, []);
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "8px 12px",
+    borderRadius: 8,
+    border: "1px solid var(--color-surface-border)",
+    background: "var(--color-surface)",
+    color: "var(--color-text-primary)",
+    fontSize: 14,
+    outline: "none",
+  };
 
-  // Shared input styles
-  const inputClass =
-    "w-full rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]";
-  const labelClass =
-    "block text-xs font-medium text-[var(--color-text-muted)] mb-1";
-  const sectionClass = "mb-6";
-  const sectionTitleClass =
-    "text-sm font-semibold text-[var(--color-text-primary)] mb-3 border-b border-[var(--color-surface-border)] pb-2";
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontSize: 13,
+    fontWeight: 500,
+    color: "var(--color-text-muted)",
+    marginBottom: 4,
+  };
 
   return (
     <div style={{ display: "flex", gap: 32, alignItems: "flex-start" }}>
@@ -226,301 +116,220 @@ export const PosterGenerator: React.FC<Props> = ({ lang }) => {
           maxHeight: "85vh",
           overflowY: "auto",
           paddingRight: 8,
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
         }}
       >
-        {/* Basic info */}
-        <div className={sectionClass}>
-          <h3 className={sectionTitleClass}>
-            {lang === "zh" ? "基本信息" : "Basic Info"}
-          </h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 100px", gap: 12 }}>
-            <div>
-              <label className={labelClass}>{t.forumTitle}</label>
-              <input
-                className={inputClass}
-                value={data.forumTitle}
-                onChange={(e) => update({ forumTitle: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className={labelClass}>{t.episodeNumber}</label>
-              <input
-                className={inputClass}
-                type="number"
-                min={1}
-                value={data.episodeNumber}
-                onChange={(e) =>
-                  update({ episodeNumber: parseInt(e.target.value) || 1 })
-                }
-              />
-            </div>
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <label className={labelClass}>{t.posterTitle}</label>
-            <input
-              className={inputClass}
-              value={data.title.replace(/\n/g, "\\n")}
-              onChange={(e) =>
-                update({ title: e.target.value.replace(/\\n/g, "\n") })
-              }
-            />
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <label className={labelClass}>{t.description}</label>
-            <textarea
-              className={inputClass}
-              rows={3}
-              value={data.description}
-              onChange={(e) => update({ description: e.target.value })}
-              style={{ resize: "vertical" }}
-            />
-          </div>
+        {/* 期数 */}
+        <div>
+          <label style={labelStyle}>期数</label>
+          <input
+            style={{ ...inputStyle, width: 100 }}
+            type="number"
+            min={1}
+            value={data.episodeNumber}
+            onChange={(e) =>
+              update({ episodeNumber: parseInt(e.target.value) || 1 })
+            }
+          />
         </div>
 
-        {/* Content items */}
-        <div className={sectionClass}>
-          <h3 className={sectionTitleClass}>{t.sectionContent}</h3>
-          {data.contentItems.map((item, i) => (
-            <div
-              key={i}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "120px 1fr auto",
-                gap: 8,
-                marginBottom: 8,
-              }}
-            >
-              <input
-                className={inputClass}
-                placeholder={t.tagLabel}
-                value={item.tag}
-                onChange={(e) => updateContentItem(i, { tag: e.target.value })}
-              />
-              <input
-                className={inputClass}
-                placeholder={t.textLabel}
-                value={item.text}
-                onChange={(e) =>
-                  updateContentItem(i, { text: e.target.value })
-                }
-              />
-              <button
-                onClick={() => removeContentItem(i)}
-                className="px-2 py-1 text-xs text-red-500 hover:text-red-700 transition-colors"
-                title={t.removeItem}
-              >
-                ✕
-              </button>
-            </div>
-          ))}
-          <button
-            onClick={addContentItem}
-            className="text-xs text-[var(--color-accent)] hover:text-[var(--color-accent-dark)] transition-colors"
-          >
-            {t.addItem}
-          </button>
+        {/* 大标题 */}
+        <div>
+          <label style={labelStyle}>大标题（换行用 \n）</label>
+          <input
+            style={inputStyle}
+            value={data.title.replace(/\n/g, "\\n")}
+            onChange={(e) =>
+              update({ title: e.target.value.replace(/\\n/g, "\n") })
+            }
+          />
         </div>
 
-        {/* Speaker */}
-        <div className={sectionClass}>
-          <h3 className={sectionTitleClass}>{t.sectionSpeaker}</h3>
-          <div
+        {/* 内容简介 */}
+        <div>
+          <label style={labelStyle}>内容简介</label>
+          <textarea
+            style={{ ...inputStyle, resize: "vertical" }}
+            rows={3}
+            value={data.description}
+            onChange={(e) => update({ description: e.target.value })}
+          />
+        </div>
+
+        {/* 分享嘉宾 */}
+        <fieldset
+          style={{
+            border: "1px solid var(--color-surface-border)",
+            borderRadius: 10,
+            padding: 16,
+          }}
+        >
+          <legend
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
+              fontSize: 14,
+              fontWeight: 600,
+              color: "var(--color-text-primary)",
+              padding: "0 8px",
             }}
           >
+            分享嘉宾
+          </legend>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div>
-              <label className={labelClass}>{t.name}</label>
+              <label style={labelStyle}>照片</label>
               <input
-                className={inputClass}
-                value={data.speaker.name}
-                onChange={(e) => updateSpeaker({ name: e.target.value })}
+                type="file"
+                accept="image/*"
+                style={inputStyle}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handlePhotoUpload("speaker", f);
+                }}
               />
             </div>
             <div>
-              <label className={labelClass}>{t.nameCn}</label>
-              <input
-                className={inputClass}
-                value={data.speaker.nameCn || ""}
-                onChange={(e) =>
-                  updateSpeaker({ nameCn: e.target.value || undefined })
-                }
+              <label style={labelStyle}>简介（每行一条信息）</label>
+              <textarea
+                style={{ ...inputStyle, resize: "vertical" }}
+                rows={4}
+                placeholder={"Axton Wang 王帅辉\n10+年互联网架构师，跨境AI从业者\n日耗费10亿Token"}
+                value={personToText(data.speaker)}
+                onChange={(e) => {
+                  const p = textToPerson(e.target.value);
+                  setData((d) => ({ ...d, speaker: { ...d.speaker, ...p } }));
+                }}
               />
+              <span style={{ fontSize: 11, color: "var(--color-text-muted)" }}>
+                第一行：姓名（英文名 中文名），后续行：简介
+              </span>
             </div>
           </div>
-          <div style={{ marginTop: 12 }}>
-            <label className={labelClass}>{t.personTitle}</label>
-            <input
-              className={inputClass}
-              value={data.speaker.title}
-              onChange={(e) => updateSpeaker({ title: e.target.value })}
-            />
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <label className={labelClass}>{t.personSubtitle}</label>
-            <input
-              className={inputClass}
-              value={data.speaker.subtitle || ""}
-              onChange={(e) =>
-                updateSpeaker({ subtitle: e.target.value || undefined })
-              }
-            />
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <label className={labelClass}>{t.photo}</label>
-            <input
-              type="file"
-              accept="image/*"
-              className={inputClass}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handlePhotoUpload("speaker", file);
-              }}
-            />
-          </div>
-        </div>
+        </fieldset>
 
-        {/* Host */}
-        <div className={sectionClass}>
-          <h3 className={sectionTitleClass}>{t.sectionHost}</h3>
+        {/* 主持人 */}
+        <fieldset
+          style={{
+            border: "1px solid var(--color-surface-border)",
+            borderRadius: 10,
+            padding: 16,
+          }}
+        >
+          <legend
+            style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "var(--color-text-primary)",
+              padding: "0 8px",
+            }}
+          >
+            主持人（可选）
+          </legend>
           <label
             style={{
               display: "flex",
               alignItems: "center",
               gap: 8,
               cursor: "pointer",
-              marginBottom: 12,
+              marginBottom: hasHost ? 12 : 0,
             }}
           >
             <input
               type="checkbox"
               checked={hasHost}
-              onChange={toggleHost}
-              className="rounded"
+              onChange={() => {
+                setHasHost((v) => {
+                  if (!v) {
+                    setData((d) => ({
+                      ...d,
+                      host: { name: "", title: "" },
+                    }));
+                  } else {
+                    setData((d) => ({ ...d, host: undefined }));
+                  }
+                  return !v;
+                });
+              }}
             />
-            <span className="text-sm text-[var(--color-text-secondary)]">
-              {t.enableHost}
+            <span style={{ fontSize: 14, color: "var(--color-text-secondary)" }}>
+              添加主持人
             </span>
           </label>
           {hasHost && data.host && (
-            <>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                }}
-              >
-                <div>
-                  <label className={labelClass}>{t.name}</label>
-                  <input
-                    className={inputClass}
-                    value={data.host.name}
-                    onChange={(e) => updateHost({ name: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label className={labelClass}>{t.nameCn}</label>
-                  <input
-                    className={inputClass}
-                    value={data.host.nameCn || ""}
-                    onChange={(e) =>
-                      updateHost({ nameCn: e.target.value || undefined })
-                    }
-                  />
-                </div>
-              </div>
-              <div style={{ marginTop: 12 }}>
-                <label className={labelClass}>{t.personTitle}</label>
-                <input
-                  className={inputClass}
-                  value={data.host.title}
-                  onChange={(e) => updateHost({ title: e.target.value })}
-                />
-              </div>
-              <div style={{ marginTop: 12 }}>
-                <label className={labelClass}>{t.personSubtitle}</label>
-                <input
-                  className={inputClass}
-                  value={data.host.subtitle || ""}
-                  onChange={(e) =>
-                    updateHost({ subtitle: e.target.value || undefined })
-                  }
-                />
-              </div>
-              <div style={{ marginTop: 12 }}>
-                <label className={labelClass}>{t.photo}</label>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div>
+                <label style={labelStyle}>照片</label>
                 <input
                   type="file"
                   accept="image/*"
-                  className={inputClass}
+                  style={inputStyle}
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handlePhotoUpload("host", file);
+                    const f = e.target.files?.[0];
+                    if (f) handlePhotoUpload("host", f);
                   }}
                 />
               </div>
-            </>
+              <div>
+                <label style={labelStyle}>简介（每行一条信息）</label>
+                <textarea
+                  style={{ ...inputStyle, resize: "vertical" }}
+                  rows={3}
+                  placeholder={"Ryan\n全栈工程师\ne2e 测试方案探索者"}
+                  value={personToText(data.host)}
+                  onChange={(e) => {
+                    const p = textToPerson(e.target.value);
+                    setData((d) => ({
+                      ...d,
+                      host: { ...(d.host || { name: "", title: "" }), ...p },
+                    }));
+                  }}
+                />
+                <span style={{ fontSize: 11, color: "var(--color-text-muted)" }}>
+                  第一行：姓名，后续行：简介
+                </span>
+              </div>
+            </div>
           )}
+        </fieldset>
+
+        {/* 时间 */}
+        <div>
+          <label style={labelStyle}>时间</label>
+          <input
+            style={inputStyle}
+            value={data.date}
+            onChange={(e) => update({ date: e.target.value })}
+          />
         </div>
 
-        {/* Event info */}
-        <div className={sectionClass}>
-          <h3 className={sectionTitleClass}>{t.sectionEvent}</h3>
-          <div>
-            <label className={labelClass}>{t.date}</label>
+        {/* 腾讯会议 */}
+        <div style={{ display: "flex", gap: 12 }}>
+          <div style={{ flex: 1 }}>
+            <label style={labelStyle}>腾讯会议号码</label>
             <input
-              className={inputClass}
-              value={data.date}
-              onChange={(e) => update({ date: e.target.value })}
-            />
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <label className={labelClass}>{t.timezones}</label>
-            <input
-              className={inputClass}
-              value={data.timezones || ""}
+              style={inputStyle}
+              value={data.meetingId || ""}
               onChange={(e) =>
-                update({ timezones: e.target.value || undefined })
+                update({ meetingId: e.target.value || undefined })
               }
             />
           </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
-              marginTop: 12,
-            }}
-          >
-            <div>
-              <label className={labelClass}>{t.meetingId}</label>
-              <input
-                className={inputClass}
-                value={data.meetingId || ""}
-                onChange={(e) =>
-                  update({ meetingId: e.target.value || undefined })
-                }
-              />
-            </div>
-            <div>
-              <label className={labelClass}>{t.meetingQr}</label>
-              <input
-                type="file"
-                accept="image/*"
-                className={inputClass}
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleQrUpload(file);
-                }}
-              />
-            </div>
+          <div style={{ flex: 1 }}>
+            <label style={labelStyle}>会议二维码</label>
+            <input
+              type="file"
+              accept="image/*"
+              style={inputStyle}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleQrUpload(f);
+              }}
+            />
           </div>
         </div>
 
-        {/* Download button */}
+        {/* Download */}
         <button
           onClick={handleDownload}
           disabled={downloading}
@@ -537,25 +346,65 @@ export const PosterGenerator: React.FC<Props> = ({ lang }) => {
             fontWeight: 600,
             cursor: downloading ? "not-allowed" : "pointer",
             marginBottom: 24,
-            transition: "opacity 0.2s",
           }}
         >
-          {downloading ? t.downloading : t.download}
+          {downloading ? "生成中..." : "下载海报 PNG"}
         </button>
       </div>
 
       {/* Preview */}
-      <div
-        style={{
-          position: "sticky",
-          top: 20,
-          flexShrink: 0,
-        }}
-      >
+      <div style={{ position: "sticky", top: 20, flexShrink: 0 }}>
         <PosterPreview data={data} scale={0.38} />
       </div>
     </div>
   );
 };
+
+/** Parse a multi-line text block into a Person object.
+ *  Line 1: name (if contains space, split into name + nameCn)
+ *  Line 2: title
+ *  Line 3+: subtitle
+ */
+function textToPerson(text: string) {
+  const lines = text.split("\n").filter((l) => l.trim());
+  const nameLine = lines[0] || "";
+  const parts = nameLine.trim().split(/\s+/);
+  let name = nameLine.trim();
+  let nameCn: string | undefined;
+  // If has both latin and CJK, split them
+  const hasCjk = /[\u4e00-\u9fff]/.test(nameLine);
+  const hasLatin = /[a-zA-Z]/.test(nameLine);
+  if (hasCjk && hasLatin && parts.length >= 2) {
+    // Find where CJK starts
+    const latinParts: string[] = [];
+    const cjkParts: string[] = [];
+    for (const p of parts) {
+      if (/[\u4e00-\u9fff]/.test(p)) {
+        cjkParts.push(p);
+      } else {
+        latinParts.push(p);
+      }
+    }
+    if (latinParts.length > 0 && cjkParts.length > 0) {
+      name = latinParts.join(" ");
+      nameCn = cjkParts.join("");
+    }
+  }
+  return {
+    name,
+    nameCn,
+    title: lines[1] || "",
+    subtitle: lines.slice(2).join("\n") || undefined,
+  };
+}
+
+function personToText(person: { name: string; nameCn?: string; title: string; subtitle?: string }): string {
+  const nameLine = person.nameCn
+    ? `${person.name} ${person.nameCn}`
+    : person.name;
+  const lines = [nameLine, person.title];
+  if (person.subtitle) lines.push(person.subtitle);
+  return lines.join("\n");
+}
 
 export default PosterGenerator;
