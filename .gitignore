@@ -26,6 +26,7 @@ pnpm-debug.log*
 
 # claude code
 .claude/settings.local.json
+.claude/history.jsonl
 .opencode/
 
 package-lock.json
