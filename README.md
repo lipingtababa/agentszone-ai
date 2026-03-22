@@ -48,13 +48,6 @@
 
 让你的 AI Coding Agent fork 这个 repo，写好内容，提个 PR。技术细节见 [CONTRIBUTING.md](CONTRIBUTING.md)——它是写给你的 Agent 看的。
 
-## 本地开发
-
-```bash
-npm install
-npm run dev      # localhost:4321
-npm run build    # 构建生产版本
-```
 
 ## 技术栈
 
