@@ -1,9 +1,5 @@
 import React, { type CSSProperties } from "react";
-
-export interface ContentItem {
-  tag: string;
-  text: string;
-}
+import { QRCodeSVG } from "qrcode.react";
 
 export interface Person {
   name: string;
@@ -18,13 +14,10 @@ export interface PosterData {
   episodeNumber: number;
   title: string;
   description: string;
-  contentItems: ContentItem[];
-  speaker: Person;
-  host?: Person;
+  contentItems: string[];
+  guests: Person[];
   date: string;
-  timezones?: string;
   meetingId?: string;
-  meetingQrCode?: string;
 }
 
 interface Props {
@@ -54,17 +47,13 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
     title,
     description,
     contentItems,
-    speaker,
-    host,
+    guests,
     date,
-    timezones,
     meetingId,
-    meetingQrCode,
   } = data;
 
   const episodeLabel = `第${numberToChinese(episodeNumber)}期`;
-  const hasHost = !!host;
-  const photoSize = hasHost ? 220 : 280;
+  const photoSize = guests.length === 1 ? 280 : guests.length === 2 ? 220 : 170;
   const titleLines = title.split("\n");
 
   const dots = [
@@ -160,7 +149,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               display: "flex",
               alignItems: "center",
               gap: 14,
-              marginBottom: 40,
+              marginBottom: 32,
             }}
           >
             <div
@@ -221,7 +210,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           </div>
 
           {/* Title */}
-          <div style={{ marginBottom: 40 }}>
+          <div style={{ marginBottom: 30 }}>
             {titleLines.map((line, i) => (
               <div
                 key={i}
@@ -244,8 +233,8 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               position: "relative",
               background: "rgba(80,120,220,0.12)",
               borderRadius: 20,
-              padding: "36px 48px",
-              marginBottom: 44,
+              padding: "28px 40px",
+              marginBottom: 32,
             }}
           >
             <span
@@ -264,9 +253,9 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </span>
             <div
               style={{
-                fontSize: 28,
+                fontSize: 34,
                 color: "rgba(210,218,255,0.9)",
-                lineHeight: 1.75,
+                lineHeight: 1.7,
                 fontWeight: 400,
               }}
             >
@@ -288,81 +277,25 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </span>
           </div>
 
-          {/* People */}
-          {hasHost ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: 80,
-                marginBottom: 40,
-                flex: 1,
-                alignItems: "center",
-              }}
-            >
-              <PersonCard person={speaker} label="分 享 嘉 宾" photoSize={photoSize} />
-              <PersonCard person={host!} label="主 持 人" photoSize={photoSize} />
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginBottom: 40,
-                flex: 1,
-                justifyContent: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: photoSize,
-                  height: photoSize,
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  border: "3px solid rgba(255,255,255,0.15)",
-                  marginBottom: 20,
-                }}
-              >
-                {speaker.photo ? (
-                  <img
-                    src={speaker.photo}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      objectPosition: "center top",
-                    }}
-                  />
-                ) : (
-                  <Placeholder size={photoSize} label="Guest" />
-                )}
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
-                <div style={roleLabelStyle}>分 享 嘉 宾</div>
-                <div style={{ fontSize: 36, fontWeight: 700, color: "#ffffff" }}>
-                  {speaker.name}
-                  {speaker.nameCn && (
-                    <span style={{ color: "#ff9d4d" }}> {speaker.nameCn}</span>
-                  )}
-                </div>
-                <div style={personTitleStyle}>{speaker.title}</div>
-                {speaker.subtitle && (
-                  <div style={personSubtitleStyle}>{speaker.subtitle}</div>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Guests */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: guests.length <= 2 ? 60 : 40,
+              marginBottom: 36,
+              alignItems: guests.length === 1 ? "center" : "flex-start",
+              flexDirection: guests.length === 1 ? "column" : "row",
+              paddingTop: guests.length > 1 ? 16 : 0,
+            }}
+          >
+            {guests.map((guest, i) => (
+              <PersonCard key={i} person={guest} photoSize={photoSize} />
+            ))}
+          </div>
 
           {/* Content items */}
-          <div style={{ marginBottom: 36 }}>
+          <div style={{ marginBottom: 36, marginTop: "auto" }}>
             <div
               style={{
                 fontSize: 22,
@@ -379,32 +312,29 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 key={i}
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  gap: 18,
-                  marginBottom: 16,
+                  alignItems: "flex-start",
+                  gap: 12,
+                  marginBottom: 14,
                 }}
               >
                 <span
                   style={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#ffffff",
-                    backgroundColor: "rgba(80,120,220,0.4)",
-                    padding: "5px 16px",
-                    borderRadius: 8,
-                    whiteSpace: "nowrap",
+                    fontSize: 20,
+                    color: "#ff9d4d",
+                    lineHeight: 1.5,
+                    flexShrink: 0,
                   }}
                 >
-                  {item.tag}
+                  ●
                 </span>
                 <span
                   style={{
-                    fontSize: 20,
-                    color: "rgba(210,218,255,0.8)",
+                    fontSize: 22,
+                    color: "rgba(210,218,255,0.85)",
                     lineHeight: 1.5,
                   }}
                 >
-                  {item.text}
+                  {item}
                 </span>
               </div>
             ))}
@@ -421,44 +351,25 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               paddingTop: 24,
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: "50%",
-                    backgroundColor: "#4ade80",
-                  }}
-                />
-                <span
-                  style={{ fontSize: 26, fontWeight: 700, color: "#ffffff" }}
-                >
-                  {date}
-                </span>
-              </div>
-              {timezones && (
-                <div
-                  style={{
-                    fontSize: 15,
-                    color: "rgba(210,218,255,0.45)",
-                    paddingLeft: 22,
-                  }}
-                >
-                  {timezones}
-                </div>
-              )}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div
+                style={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  backgroundColor: "#4ade80",
+                }}
+              />
+              <span
+                style={{ fontSize: 26, fontWeight: 700, color: "#ffffff" }}
+              >
+                {date}
+              </span>
             </div>
             {meetingId && (
               <div
-                style={{ display: "flex", alignItems: "center", gap: 16 }}
+                style={{ display: "flex", alignItems: "center", gap: 18 }}
               >
-                {meetingQrCode && (
-                  <img
-                    src={meetingQrCode}
-                    style={{ width: 80, height: 80, borderRadius: 8 }}
-                  />
-                )}
                 <div
                   style={{
                     display: "flex",
@@ -469,22 +380,42 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 >
                   <div
                     style={{
-                      fontSize: 16,
-                      color: "rgba(210,218,255,0.45)",
+                      fontSize: 20,
+                      color: "rgba(210,218,255,0.6)",
+                      fontWeight: 500,
                     }}
                   >
                     腾讯会议
                   </div>
                   <div
                     style={{
-                      fontSize: 26,
-                      fontWeight: 600,
+                      fontSize: 30,
+                      fontWeight: 700,
                       color: "#ffffff",
                       letterSpacing: "0.05em",
                     }}
                   >
                     {meetingId}
                   </div>
+                </div>
+                <div
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 10,
+                    overflow: "hidden",
+                    background: "#ffffff",
+                    padding: 8,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <QRCodeSVG
+                    value={`https://meeting.tencent.com/dm/${meetingId.replace(/\s/g, "")}`}
+                    size={104}
+                    level="M"
+                  />
                 </div>
               </div>
             )}
@@ -497,9 +428,8 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
 
 const PersonCard: React.FC<{
   person: Person;
-  label: string;
   photoSize: number;
-}> = ({ person, label, photoSize }) => (
+}> = ({ person, photoSize }) => (
   <div
     style={{
       display: "flex",
@@ -528,10 +458,22 @@ const PersonCard: React.FC<{
           }}
         />
       ) : (
-        <Placeholder
-          size={photoSize}
-          label={label.includes("嘉") ? "Guest" : "Host"}
-        />
+        <div
+          style={{
+            width: photoSize,
+            height: photoSize,
+            borderRadius: "50%",
+            background:
+              "linear-gradient(135deg, rgba(100,140,255,0.3), rgba(180,100,255,0.3))",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span style={{ fontSize: 22, color: "rgba(255,255,255,0.4)" }}>
+            Guest
+          </span>
+        </div>
       )}
     </div>
     <div
@@ -542,63 +484,20 @@ const PersonCard: React.FC<{
         gap: 4,
       }}
     >
-      <div style={{ ...roleLabelStyle, fontSize: 16, marginBottom: 2 }}>
-        {label}
-      </div>
       <div style={{ fontSize: 30, fontWeight: 700, color: "#ffffff" }}>
         {person.name}
         {person.nameCn && (
           <span style={{ color: "#ff9d4d" }}> {person.nameCn}</span>
         )}
       </div>
-      <div style={{ ...personTitleStyle, fontSize: 17 }}>{person.title}</div>
+      <div style={{ fontSize: 17, color: "rgba(210,218,255,0.65)", textAlign: "center" }}>
+        {person.title}
+      </div>
       {person.subtitle && (
-        <div style={{ ...personSubtitleStyle, fontSize: 16 }}>
+        <div style={{ fontSize: 16, color: "rgba(210,218,255,0.5)", textAlign: "center" }}>
           {person.subtitle}
         </div>
       )}
     </div>
   </div>
 );
-
-const Placeholder: React.FC<{ size: number; label: string }> = ({
-  size,
-  label,
-}) => (
-  <div
-    style={{
-      width: size,
-      height: size,
-      borderRadius: "50%",
-      background:
-        "linear-gradient(135deg, rgba(100,140,255,0.3), rgba(180,100,255,0.3))",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    <span style={{ fontSize: 22, color: "rgba(255,255,255,0.4)" }}>
-      {label}
-    </span>
-  </div>
-);
-
-const roleLabelStyle: CSSProperties = {
-  fontSize: 18,
-  color: "rgba(100,180,255,0.8)",
-  letterSpacing: "0.3em",
-  fontWeight: 500,
-  marginBottom: 4,
-};
-
-const personTitleStyle: CSSProperties = {
-  fontSize: 20,
-  color: "rgba(210,218,255,0.65)",
-  textAlign: "center",
-};
-
-const personSubtitleStyle: CSSProperties = {
-  fontSize: 19,
-  color: "rgba(210,218,255,0.5)",
-  textAlign: "center",
-};

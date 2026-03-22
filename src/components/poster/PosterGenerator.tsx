@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { PosterPreview, type PosterData } from "./PosterPreview";
+import { PosterPreview, type PosterData, type Person } from "./PosterPreview";
+
 import { toPng } from "html-to-image";
 
 const defaultData: PosterData = {
@@ -9,25 +10,24 @@ const defaultData: PosterData = {
   description:
     "当AI席卷而来，特别是OpenClaw开启全民养虾之后，跨境行业如何迎接变化？纯干货分享SOP转向Skill之后如何改造，借鉴经验进行其他行业赋能。",
   contentItems: [
-    { tag: "SOP→Skill", text: "跨境行业中如何进行SOP到Skill的改造？" },
-    { tag: "经验分享", text: "跨境行业Skill改造中的问题和实战经验分享" },
-    { tag: "未来展望", text: "未来Agent时代各行业该何去何从？" },
+    "跨境行业中如何进行SOP到Skill的改造？",
+    "跨境行业Skill改造中的问题和实战经验分享",
+    "未来Agent时代各行业该何去何从？",
   ],
-  speaker: {
-    name: "Axton Wang",
-    nameCn: "王帅辉",
-    title: "10+年互联网架构师，跨境AI从业者",
-    subtitle: "日耗费10亿Token",
-  },
-  date: "2026.03.22 (周日)",
-  timezones:
-    "北京 CST 20:00-21:30 | 欧洲 CET 13:00-14:30 | 美东 EDT 08:00-09:30 | 美西 PDT 05:00-06:30",
+  guests: [
+    {
+      name: "Axton Wang",
+      nameCn: "王帅辉",
+      title: "10+年互联网架构师，跨境AI从业者",
+      subtitle: "日耗费10亿Token",
+    },
+  ],
+  date: "2026.03.22 (周日) 20:00",
   meetingId: "740 886 774",
 };
 
 export const PosterGenerator: React.FC = () => {
   const [data, setData] = useState<PosterData>(defaultData);
-  const [hasHost, setHasHost] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
   const update = useCallback(
@@ -35,34 +35,42 @@ export const PosterGenerator: React.FC = () => {
     []
   );
 
-  const handlePhotoUpload = useCallback(
-    (target: "speaker" | "host", file: File) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const url = e.target?.result as string;
-        if (target === "speaker") {
-          setData((d) => ({ ...d, speaker: { ...d.speaker, photo: url } }));
-        } else {
-          setData((d) => ({
-            ...d,
-            host: { ...(d.host || { name: "", title: "" }), photo: url },
-          }));
-        }
-      };
-      reader.readAsDataURL(file);
-    },
+  const updateGuest = useCallback(
+    (index: number, patch: Partial<Person>) =>
+      setData((d) => ({
+        ...d,
+        guests: d.guests.map((g, i) => (i === index ? { ...g, ...patch } : g)),
+      })),
     []
   );
 
-  const handleQrUpload = useCallback(
-    (file: File) => {
+  const addGuest = useCallback(
+    () =>
+      setData((d) => ({
+        ...d,
+        guests: [...d.guests, { name: "", title: "" }],
+      })),
+    []
+  );
+
+  const removeGuest = useCallback(
+    (index: number) =>
+      setData((d) => ({
+        ...d,
+        guests: d.guests.filter((_, i) => i !== index),
+      })),
+    []
+  );
+
+  const handleGuestPhoto = useCallback(
+    (index: number, file: File) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        update({ meetingQrCode: e.target?.result as string });
+        updateGuest(index, { photo: e.target?.result as string });
       };
       reader.readAsDataURL(file);
     },
-    [update]
+    [updateGuest]
   );
 
   const handleDownload = useCallback(async () => {
@@ -70,12 +78,16 @@ export const PosterGenerator: React.FC = () => {
     if (!el) return;
     setDownloading(true);
     try {
+      // Remove scale transform to capture at full 1080x1920
+      const origTransform = el.style.transform;
+      el.style.transform = "none";
       const url = await toPng(el, {
         width: 1080,
         height: 1920,
         pixelRatio: 1,
         cacheBust: true,
       });
+      el.style.transform = origTransform;
       const link = document.createElement("a");
       link.download = `poster-ep${data.episodeNumber}.png`;
       link.href = url;
@@ -158,175 +170,161 @@ export const PosterGenerator: React.FC = () => {
           />
         </div>
 
-        {/* 分享嘉宾 */}
-        <fieldset
-          style={{
-            border: "1px solid var(--color-surface-border)",
-            borderRadius: 10,
-            padding: 16,
-          }}
-        >
-          <legend
-            style={{
-              fontSize: 14,
-              fontWeight: 600,
-              color: "var(--color-text-primary)",
-              padding: "0 8px",
-            }}
-          >
-            分享嘉宾
-          </legend>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <div>
-              <label style={labelStyle}>照片</label>
-              <input
-                type="file"
-                accept="image/*"
-                style={inputStyle}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handlePhotoUpload("speaker", f);
-                }}
-              />
-            </div>
-            <div>
-              <label style={labelStyle}>简介（每行一条信息）</label>
-              <textarea
-                style={{ ...inputStyle, resize: "vertical" }}
-                rows={4}
-                placeholder={"Axton Wang 王帅辉\n10+年互联网架构师，跨境AI从业者\n日耗费10亿Token"}
-                value={personToText(data.speaker)}
-                onChange={(e) => {
-                  const p = textToPerson(e.target.value);
-                  setData((d) => ({ ...d, speaker: { ...d.speaker, ...p } }));
-                }}
-              />
-              <span style={{ fontSize: 11, color: "var(--color-text-muted)" }}>
-                第一行：姓名（英文名 中文名），后续行：简介
-              </span>
-            </div>
-          </div>
-        </fieldset>
+        {/* 本期内容 */}
+        <div>
+          <label style={labelStyle}>本期内容（每行一条）</label>
+          <textarea
+            style={{ ...inputStyle, resize: "vertical" }}
+            rows={4}
+            placeholder={"跨境行业中如何进行SOP到Skill的改造？\n跨境行业Skill改造中的问题和实战经验分享\n未来Agent时代各行业该何去何从？"}
+            value={data.contentItems.join("\n")}
+            onChange={(e) =>
+              update({
+                contentItems: e.target.value
+                  .split("\n")
+                  .filter((l) => l.trim()),
+              })
+            }
+          />
+        </div>
 
-        {/* 主持人 */}
-        <fieldset
-          style={{
-            border: "1px solid var(--color-surface-border)",
-            borderRadius: 10,
-            padding: 16,
-          }}
-        >
-          <legend
+        {/* 嘉宾 */}
+        {data.guests.map((guest, i) => (
+          <fieldset
+            key={i}
             style={{
-              fontSize: 14,
-              fontWeight: 600,
-              color: "var(--color-text-primary)",
-              padding: "0 8px",
+              border: "1px solid var(--color-surface-border)",
+              borderRadius: 10,
+              padding: 16,
+              position: "relative",
             }}
           >
-            主持人（可选）
-          </legend>
-          <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              cursor: "pointer",
-              marginBottom: hasHost ? 12 : 0,
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={hasHost}
-              onChange={() => {
-                setHasHost((v) => {
-                  if (!v) {
-                    setData((d) => ({
-                      ...d,
-                      host: { name: "", title: "" },
-                    }));
-                  } else {
-                    setData((d) => ({ ...d, host: undefined }));
-                  }
-                  return !v;
-                });
+            <legend
+              style={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "var(--color-text-primary)",
+                padding: "0 8px",
               }}
-            />
-            <span style={{ fontSize: 14, color: "var(--color-text-secondary)" }}>
-              添加主持人
-            </span>
-          </label>
-          {hasHost && data.host && (
+            >
+              嘉宾 {data.guests.length > 1 ? i + 1 : ""}
+            </legend>
+            {data.guests.length > 1 && (
+              <button
+                onClick={() => removeGuest(i)}
+                style={{
+                  position: "absolute",
+                  top: -10,
+                  right: 10,
+                  background: "none",
+                  border: "none",
+                  color: "var(--color-text-muted)",
+                  cursor: "pointer",
+                  fontSize: 16,
+                }}
+                title="删除嘉宾"
+              >
+                ✕
+              </button>
+            )}
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <div>
                 <label style={labelStyle}>照片</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={inputStyle}
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (f) handlePhotoUpload("host", f);
-                  }}
-                />
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {guest.photo && (
+                    <img
+                      src={guest.photo}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        flexShrink: 0,
+                      }}
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={inputStyle}
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) handleGuestPhoto(i, f);
+                    }}
+                  />
+                </div>
               </div>
               <div>
                 <label style={labelStyle}>简介（每行一条信息）</label>
                 <textarea
                   style={{ ...inputStyle, resize: "vertical" }}
-                  rows={3}
-                  placeholder={"Ryan\n全栈工程师\ne2e 测试方案探索者"}
-                  value={personToText(data.host)}
+                  rows={4}
+                  placeholder={"Axton Wang 王帅辉\n10+年互联网架构师，跨境AI从业者\n日耗费10亿Token"}
+                  value={personToText(guest)}
                   onChange={(e) => {
                     const p = textToPerson(e.target.value);
-                    setData((d) => ({
-                      ...d,
-                      host: { ...(d.host || { name: "", title: "" }), ...p },
-                    }));
+                    updateGuest(i, p);
                   }}
                 />
                 <span style={{ fontSize: 11, color: "var(--color-text-muted)" }}>
-                  第一行：姓名，后续行：简介
+                  第一行：姓名（英文名 中文名），后续行：简介
                 </span>
               </div>
             </div>
-          )}
-        </fieldset>
+          </fieldset>
+        ))}
+        <button
+          onClick={addGuest}
+          style={{
+            background: "none",
+            border: "1px dashed var(--color-surface-border)",
+            borderRadius: 10,
+            padding: "10px",
+            color: "var(--color-text-muted)",
+            cursor: "pointer",
+            fontSize: 14,
+          }}
+        >
+          + 添加嘉宾
+        </button>
 
         {/* 时间 */}
         <div>
           <label style={labelStyle}>时间</label>
           <input
+            type="datetime-local"
             style={inputStyle}
-            value={data.date}
-            onChange={(e) => update({ date: e.target.value })}
+            value={dateToLocal(data.date)}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v) {
+                const d = new Date(v);
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, "0");
+                const dd = String(d.getDate()).padStart(2, "0");
+                const hh = String(d.getHours()).padStart(2, "0");
+                const mi = String(d.getMinutes()).padStart(2, "0");
+                const dayNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+                const day = dayNames[d.getDay()];
+                update({ date: `${yyyy}.${mm}.${dd} (${day}) ${hh}:${mi}` });
+              }
+            }}
           />
         </div>
 
         {/* 腾讯会议 */}
-        <div style={{ display: "flex", gap: 12 }}>
-          <div style={{ flex: 1 }}>
-            <label style={labelStyle}>腾讯会议号码</label>
-            <input
-              style={inputStyle}
-              value={data.meetingId || ""}
-              onChange={(e) =>
-                update({ meetingId: e.target.value || undefined })
-              }
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={labelStyle}>会议二维码</label>
-            <input
-              type="file"
-              accept="image/*"
-              style={inputStyle}
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) handleQrUpload(f);
-              }}
-            />
-          </div>
+        <div>
+          <label style={labelStyle}>腾讯会议号码</label>
+          <input
+            style={inputStyle}
+            value={data.meetingId || ""}
+            onChange={(e) =>
+              update({ meetingId: e.target.value || undefined })
+            }
+          />
+          <span style={{ fontSize: 11, color: "var(--color-text-muted)" }}>
+            二维码将根据会议号自动生成
+          </span>
         </div>
 
         {/* Download */}
@@ -353,29 +351,22 @@ export const PosterGenerator: React.FC = () => {
       </div>
 
       {/* Preview */}
-      <div style={{ position: "sticky", top: 20, flexShrink: 0 }}>
-        <PosterPreview data={data} scale={0.38} />
+      <div style={{ position: "sticky", top: 20, flexShrink: 0, maxHeight: "90vh", overflow: "auto" }}>
+        <PosterPreview data={data} scale={0.32} />
       </div>
     </div>
   );
 };
 
-/** Parse a multi-line text block into a Person object.
- *  Line 1: name (if contains space, split into name + nameCn)
- *  Line 2: title
- *  Line 3+: subtitle
- */
 function textToPerson(text: string) {
   const lines = text.split("\n").filter((l) => l.trim());
   const nameLine = lines[0] || "";
   const parts = nameLine.trim().split(/\s+/);
   let name = nameLine.trim();
   let nameCn: string | undefined;
-  // If has both latin and CJK, split them
   const hasCjk = /[\u4e00-\u9fff]/.test(nameLine);
   const hasLatin = /[a-zA-Z]/.test(nameLine);
   if (hasCjk && hasLatin && parts.length >= 2) {
-    // Find where CJK starts
     const latinParts: string[] = [];
     const cjkParts: string[] = [];
     for (const p of parts) {
@@ -398,7 +389,13 @@ function textToPerson(text: string) {
   };
 }
 
-function personToText(person: { name: string; nameCn?: string; title: string; subtitle?: string }): string {
+function dateToLocal(display: string): string {
+  const m = display.match(/(\d{4})\.(\d{2})\.(\d{2}).*?(\d{2}):(\d{2})/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}`;
+  return "";
+}
+
+function personToText(person: Person): string {
   const nameLine = person.nameCn
     ? `${person.name} ${person.nameCn}`
     : person.name;
