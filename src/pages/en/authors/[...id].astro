@@ -26,7 +26,7 @@ export async function getStaticPaths() {
 
 const t = useTranslations('en');
 const { author, articles, authorMap } = Astro.props;
-const { name, bio, website, github, twitter } = author.data;
+const { name, bio, website, github, twitter, avatar } = author.data;
 const { Content } = await render(author);
 ---
 
@@ -35,10 +35,19 @@ const { Content } = await render(author);
   description={bio}
 >
   <div class="mb-10">
-    <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-      {name}
-    </h1>
-    <p class="mt-2 text-lg text-[var(--color-text-secondary)]">{bio}</p>
+    <div class="flex items-start gap-6">
+      {avatar && (
+        <img
+          src={avatar}
+          alt={name}
+          class="h-24 w-24 rounded-full object-cover ring-2 ring-[var(--color-surface-border)] shrink-0"
+        />
+      )}
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+          {name}
+        </h1>
+        <p class="mt-2 text-lg text-[var(--color-text-secondary)]">{bio}</p>
     <div class="mt-3 flex flex-wrap gap-4 text-sm">
       {website && (
         <a
@@ -70,6 +79,8 @@ const { Content } = await render(author);
           Twitter
         </a>
       )}
+    </div>
+      </div>
     </div>
   </div>
 
