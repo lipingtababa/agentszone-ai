@@ -26,6 +26,31 @@ const articles = defineCollection({
   }),
 });
 
+const articlesEn = defineCollection({
+  loader: glob({ pattern: '[^_]*.md', base: 'src/content/articles/en' }),
+  schema: z.object({
+    title: z.string().max(120),
+    description: z.string().max(300),
+    author: reference('authors'),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).min(1).max(5),
+    original_url: z.string().url().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const authorsEn = defineCollection({
+  loader: glob({ pattern: '[^_]*.md', base: 'src/content/authors/en' }),
+  schema: z.object({
+    name: z.string(),
+    bio: z.string(),
+    website: z.string().url().optional(),
+    github: z.string().optional(),
+    twitter: z.string().optional(),
+    avatar: z.string().optional(),
+  }),
+});
+
 const events = defineCollection({
   loader: glob({ pattern: '[^_]*.md', base: 'src/content/events' }),
   schema: z.object({
@@ -39,4 +64,4 @@ const events = defineCollection({
   }),
 });
 
-export const collections = { articles, authors, events };
+export const collections = { articles, articlesEn, authors, authorsEn, events };

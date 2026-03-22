@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EventCard from '../../../components/EventCard.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const t = useTranslations('en');
+
+const allEvents = await getCollection('events');
+
+const events = allEvents.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<BaseLayout
+  title={`${t('events.title')} | ${t('site.name')}`}
+  description={t('events.desc')}
+>
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+    {t('events.title')}
+  </h1>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">{t('events.desc')}</p>
+  <div class="grid gap-6 sm:grid-cols-2">
+    {events.map((event) => (
+      <EventCard event={event} />
+    ))}
+  </div>
+</BaseLayout>

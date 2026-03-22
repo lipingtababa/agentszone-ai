@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import TagList from './TagList.astro';
+import { getLang, useTranslations, localePath } from '../i18n/utils';
 
 interface Props {
   event: CollectionEntry<'events'>;
@@ -8,16 +9,22 @@ interface Props {
 
 const { event } = Astro.props;
 const { number, title, description, date, speakers, poster, tags } = event.data;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const dateLocale = lang === 'en' ? 'en-US' : 'zh-CN';
 
-const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
+const formattedDate = new Date(date).toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
+
+const eventHref = localePath(lang, `/events/${event.id}`);
+const episodeLabel = t('event.episode', { n: number });
 ---
 
 <article class="group rounded-xl border border-[var(--color-surface-border)] overflow-hidden glow-hover transition-all">
-  <a href={`/events/${event.id}`} class="block">
+  <a href={eventHref} class="block">
     {poster ? (
       <div class="aspect-[2/1] overflow-hidden">
         <img
@@ -36,11 +43,11 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
   <div class="px-5 py-4">
     <div class="mb-2 flex items-center gap-2 text-xs text-[var(--color-text-muted)]">
       <span class="inline-block rounded-full bg-gradient-to-r from-[var(--color-primary-500)] to-purple-500 px-2.5 py-0.5 text-xs font-medium text-white">
-        第{number}期
+        {episodeLabel}
       </span>
       <time datetime={date.toISOString()}>{formattedDate}</time>
     </div>
-    <a href={`/events/${event.id}`} class="block">
+    <a href={eventHref} class="block">
       <h2 class="text-lg font-semibold text-[var(--color-text-primary)] transition-all">
         <span class="hover-text-gradient">{title}</span>
       </h2>

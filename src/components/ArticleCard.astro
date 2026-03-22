@@ -1,17 +1,20 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import TagList from './TagList.astro';
+import { getLang, localePath } from '../i18n/utils';
 
 interface Props {
-  article: CollectionEntry<'articles'>;
+  article: CollectionEntry<'articles'> | CollectionEntry<'articlesEn'>;
   authorName: string;
   featured?: boolean;
 }
 
 const { article, authorName, featured = false } = Astro.props;
 const { title, description, date, tags, author } = article.data;
+const lang = getLang(Astro.currentLocale);
+const dateLocale = lang === 'en' ? 'en-US' : 'zh-CN';
 
-const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
+const formattedDate = new Date(date).toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
@@ -33,7 +36,7 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
 
   <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-muted)]">
     <a
-      href={`/authors/${author.id}`}
+      href={localePath(lang, `/authors/${author.id}`)}
       class="font-medium hover:text-[var(--color-text-primary)] transition-colors"
     >
       {authorName}
@@ -41,7 +44,7 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
     <span>/</span>
     <time datetime={date.toISOString()}>{formattedDate}</time>
   </div>
-  <a href={`/articles/${article.id}`} class="block">
+  <a href={localePath(lang, `/articles/${article.id}`)} class="block">
     <h2
       class:list={[
         'font-semibold text-[var(--color-text-primary)] transition-all',

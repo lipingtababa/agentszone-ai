@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AuthorBadge from '../../../components/AuthorBadge.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const t = useTranslations('en');
+const authors = await getCollection('authorsEn');
+---
+
+<BaseLayout
+  title={`${t('authors.title')} | ${t('site.name')}`}
+  description={t('authors.desc')}
+>
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+    {t('authors.title')}
+  </h1>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">{t('authors.desc')}</p>
+  <div class="grid gap-2 sm:grid-cols-2">
+    {authors.map((author) => <AuthorBadge author={author} />)}
+  </div>
+</BaseLayout>

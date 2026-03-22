@@ -1,5 +1,10 @@
 ---
+import { getLang, useTranslations, localePath } from '../i18n/utils';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
 const year = new Date().getFullYear();
+const siteName = lang === 'en' ? 'AgentsZone' : 'Agents 特区';
 ---
 
 <footer class="bg-[var(--color-surface)]">
@@ -12,19 +17,19 @@ const year = new Date().getFullYear();
             A
           </div>
           <span class="text-lg font-bold tracking-tight text-[var(--color-text-primary)]">
-            Agents <span class="text-gradient">特区</span>
+            Agents{lang !== 'en' && ' '}<span class="text-gradient">{lang === 'en' ? 'Zone' : '特区'}</span>
           </span>
         </div>
         <p class="mt-3 text-sm text-[var(--color-text-muted)] leading-relaxed">
-          一线实践者的AI agent管理经验，从个人探索到组织级实践。
+          {t('footer.desc')}
         </p>
       </div>
       <div class="flex gap-8 text-sm">
         <div class="flex flex-col gap-3">
-          <a href="/articles" class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">文章</a>
-          <a href="/authors" class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">作者</a>
-          <a href="/tags" class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">话题</a>
-          <a href="/events" class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">活动</a>
+          <a href={localePath(lang, '/articles')} class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">{t('nav.articles')}</a>
+          <a href={localePath(lang, '/authors')} class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">{t('nav.authors')}</a>
+          <a href={localePath(lang, '/tags')} class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">{t('nav.tags')}</a>
+          <a href={localePath(lang, '/events')} class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">{t('nav.events')}</a>
         </div>
         <div class="flex flex-col gap-3">
           <a href="/rss.xml" class="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">RSS</a>
@@ -34,14 +39,14 @@ const year = new Date().getFullYear();
             target="_blank"
             rel="noopener noreferrer"
           >
-            投稿 <span class="inline-block translate-y-[-1px] text-[10px] opacity-50">&#8599;</span>
+            {t('footer.contribute')} <span class="inline-block translate-y-[-1px] text-[10px] opacity-50">&#8599;</span>
           </a>
         </div>
       </div>
     </div>
     <div class="mt-12 border-t border-[var(--color-surface-border)] pt-6">
       <p class="text-xs text-[var(--color-text-muted)]">
-        &copy; {year} Agents 特区
+        &copy; {year} {siteName}
       </p>
     </div>
   </div>

@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const t = useTranslations('en');
+
+const allArticles = await getCollection('articlesEn', ({ data }) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
+
+const articles = allArticles.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const authors = await getCollection('authors');
+const authorMap = new Map(authors.map((a) => [a.id, a.data.name]));
+---
+
+<BaseLayout
+  title={`${t('articles.title')} | ${t('site.name')}`}
+  description={t('articles.desc')}
+>
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+    {t('articles.title')}
+  </h1>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">{t('articles.desc')}</p>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {articles.map((article) => (
+      <ArticleCard
+        article={article}
+        authorName={authorMap.get(article.data.author.id) ?? 'Unknown'}
+      />
+    ))}
+  </div>
+  {articles.length === 0 && (
+    <p class="text-[var(--color-text-muted)] text-sm">
+      No English articles yet. Check back soon, or read the{' '}
+      <a href="/articles" class="text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] underline">Chinese version</a>.
+    </p>
+  )}
+</BaseLayout>

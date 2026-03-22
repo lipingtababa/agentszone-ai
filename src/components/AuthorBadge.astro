@@ -1,16 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getLang, localePath } from '../i18n/utils';
 
 interface Props {
-  author: CollectionEntry<'authors'>;
+  author: CollectionEntry<'authors'> | CollectionEntry<'authorsEn'>;
 }
 
 const { author } = Astro.props;
 const { name, bio, avatar } = author.data;
+const lang = getLang(Astro.currentLocale);
+const href = localePath(lang, `/authors/${author.id}`);
 ---
 
 <a
-  href={`/authors/${author.id}`}
+  href={href}
   class="group flex items-center gap-4 rounded-xl border border-[var(--color-surface-border)] p-4 transition-all glow-hover"
 >
   {avatar ? (

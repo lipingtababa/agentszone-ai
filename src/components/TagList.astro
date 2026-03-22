@@ -1,15 +1,18 @@
 ---
+import { getLang, localePath } from '../i18n/utils';
+
 interface Props {
   tags: string[];
 }
 
 const { tags } = Astro.props;
+const lang = getLang(Astro.currentLocale);
 ---
 
 <div class="flex flex-wrap gap-2">
   {tags.map((tag) => (
     <a
-      href={`/tags/${tag}`}
+      href={localePath(lang, `/tags/${tag}`)}
       class="inline-block rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-alt)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary-400)] hover:border-[var(--color-primary-500)]/50 hover:shadow-sm transition-all"
     >
       {tag}

@@ -2,28 +2,32 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import TagList from '../components/TagList.astro';
+import { getLang, useTranslations, localePath } from '../i18n/utils';
 
 interface Props {
-  article: CollectionEntry<'articles'>;
+  article: CollectionEntry<'articles'> | CollectionEntry<'articlesEn'>;
   authorName: string;
 }
 
 const { article, authorName } = Astro.props;
 const { title, description, author, date, tags, original_url } = article.data;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const dateLocale = lang === 'en' ? 'en-US' : 'zh-CN';
 
-const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
+const formattedDate = new Date(date).toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 ---
 
-<BaseLayout title={`${title} | Agents 特区`} description={description}>
+<BaseLayout title={`${title} | ${t('site.name')}`} description={description}>
   <article class="mx-auto max-w-2xl">
     <header class="mb-12">
       <div class="mb-4 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
         <a
-          href={`/authors/${author.id}`}
+          href={localePath(lang, `/authors/${author.id}`)}
           class="font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
         >
           {authorName}
@@ -39,7 +43,7 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
       </div>
       {original_url && (
         <div class="mt-6 glass rounded-xl border-l-2 border-l-[var(--color-accent-start)] px-4 py-2.5 text-sm text-[var(--color-text-secondary)]">
-          原文发布于{' '}
+          {t('article.originally')}{' '}
           <a
             href={original_url}
             class="text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] underline"

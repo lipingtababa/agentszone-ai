@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('en');
+
+const allArticles = await getCollection('articlesEn', ({ data }) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
+
+const articles = allArticles.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const authors = await getCollection('authors');
+const authorMap = new Map(authors.map((a) => [a.id, a.data.name]));
+
+const featuredArticle = articles[0];
+const remainingArticles = articles.slice(1);
+---
+
+<BaseLayout title={t('site.name')} description={t('site.description')}>
+  <section class="mb-16">
+    <div class="mb-6">
+      <span class="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-elevated)]/50 px-3.5 py-1.5 text-xs font-medium text-[var(--color-text-muted)]">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+        </span>
+        {t('site.tagline')}
+      </span>
+    </div>
+    <h1 class="text-5xl font-extrabold tracking-tight text-[var(--color-text-primary)] sm:text-6xl lg:text-7xl">
+      Agents<span class="text-gradient">Zone</span>
+    </h1>
+    <p class="mt-6 text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-2xl">
+      {t('home.hero.p1')}
+    </p>
+    <p class="mt-3 text-lg text-[var(--color-text-muted)] leading-relaxed max-w-2xl">
+      {t('home.hero.p2')}
+    </p>
+    <div class="mt-8 gradient-line w-24"></div>
+  </section>
+
+  <section>
+    <h2 class="mb-8 text-xs font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
+      {t('home.latest')}
+    </h2>
+
+    {featuredArticle && (
+      <div class="mb-4">
+        <ArticleCard
+          article={featuredArticle}
+          authorName={authorMap.get(featuredArticle.data.author.id) ?? 'Unknown'}
+          featured={true}
+        />
+      </div>
+    )}
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      {remainingArticles.map((article) => (
+        <ArticleCard
+          article={article}
+          authorName={authorMap.get(article.data.author.id) ?? 'Unknown'}
+        />
+      ))}
+    </div>
+
+    {articles.length === 0 && (
+      <p class="text-[var(--color-text-muted)] text-sm">
+        No English articles yet. Check back soon, or read the{' '}
+        <a href="/" class="text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] underline">Chinese version</a>.
+      </p>
+    )}
+  </section>
+</BaseLayout>

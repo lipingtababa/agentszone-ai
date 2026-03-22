@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TagList from '../../../components/TagList.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+
+  return events.map((event) => ({
+    params: { id: event.id },
+    props: { event },
+  }));
+}
+
+const t = useTranslations('en');
+const { event } = Astro.props;
+const { number, title, description, date, speakers, poster, tags } = event.data;
+const { Content } = await render(event);
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`${title} | ${t('site.name')}`} description={description}>
+  <article class="mx-auto max-w-2xl">
+    {poster && (
+      <img
+        src={poster}
+        alt={title}
+        class="mb-8 w-full rounded-lg"
+      />
+    )}
+    <header class="mb-12">
+      <div class="mb-4 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
+        <span class="inline-block rounded-md bg-[var(--color-primary-600)] px-2.5 py-0.5 text-xs font-medium text-white">
+          {t('event.episode', { n: number })}
+        </span>
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+        {title}
+      </h1>
+      {speakers && speakers.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {speakers.map((speaker) => (
+            <span class="inline-block rounded-full bg-[var(--color-surface-alt)] border border-[var(--color-surface-border)] px-3 py-1 text-sm text-[var(--color-text-secondary)]">
+              {speaker}
+            </span>
+          ))}
+        </div>
+      )}
+      <div class="mt-4">
+        <TagList tags={tags} />
+      </div>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
