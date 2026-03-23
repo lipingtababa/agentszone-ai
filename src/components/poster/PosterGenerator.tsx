@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { PosterPreview, type PosterData, type Person } from "./PosterPreview";
+import { PosterPreview, type PosterData, type Person, type PosterStyle } from "./PosterPreview";
 
 import { toPng } from "html-to-image";
 
@@ -24,6 +24,7 @@ const defaultData: PosterData = {
   ],
   date: "2026.03.22 (周日) 20:00",
   meetingId: "740 886 774",
+  style: "dark" as PosterStyle,
 };
 
 export const PosterGenerator: React.FC = () => {
@@ -174,6 +175,97 @@ export const PosterGenerator: React.FC = () => {
           gap: 16,
         }}
       >
+        {/* Style switcher */}
+        <div>
+          <label style={labelStyle}>海报风格</label>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+            }}
+          >
+            <button
+              onClick={() => update({ style: "dark" })}
+              style={{
+                flex: 1,
+                padding: "10px 8px",
+                borderRadius: 8,
+                border: data.style === "dark" ? "2px solid #6b5ce7" : "1px solid var(--color-surface-border)",
+                background: data.style === "dark" ? "linear-gradient(135deg, #2a1a5e, #1e1565)" : "var(--color-surface)",
+                color: data.style === "dark" ? "#fff" : "var(--color-text-primary)",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 500,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+              深色科技
+            </button>
+            <button
+              onClick={() => update({ style: "minimal" })}
+              style={{
+                flex: 1,
+                padding: "10px 8px",
+                borderRadius: 8,
+                border: data.style === "minimal" ? "2px solid #1a237e" : "1px solid var(--color-surface-border)",
+                background: data.style === "minimal" ? "#f5f5f5" : "var(--color-surface)",
+                color: data.style === "minimal" ? "#1a237e" : "var(--color-text-primary)",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 500,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              极简流线
+            </button>
+            <button
+              onClick={() => update({ style: "glass" })}
+              style={{
+                flex: 1,
+                padding: "10px 8px",
+                borderRadius: 8,
+                border: data.style === "glass" ? "2px solid #4a6a9a" : "1px solid var(--color-surface-border)",
+                background: data.style === "glass" ? "linear-gradient(135deg, rgba(200,220,255,0.3), rgba(230,240,250,0.5))" : "var(--color-surface)",
+                color: data.style === "glass" ? "#2a3f5f" : "var(--color-text-primary)",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 500,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              玻璃光影
+            </button>
+          </div>
+        </div>
+
         {/* 期数 */}
         <div>
           <label style={labelStyle}>期数</label>
