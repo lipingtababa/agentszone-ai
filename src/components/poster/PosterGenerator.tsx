@@ -6,9 +6,9 @@ import { toPng } from "html-to-image";
 const defaultData: PosterData = {
   forumTitle: "Agents特区论坛",
   episodeNumber: 18,
-  title: "AI客服",
+  title: "AI客服分享",
   description:
-    "深入探讨AI客服的业务背景、LLM时代的解决方案，以及仍存在的遗留问题。",
+    "深入探讨AI客服的业务背景、LLM时代AI客服的解决方案以及在LLM时代AI客服领域仍遗留的问题。",
   contentItems: [
     "AI客服业务背景和前LLM时代的问题",
     "LLM时代AI客服的解决方案",
