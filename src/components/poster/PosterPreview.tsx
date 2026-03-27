@@ -836,8 +836,8 @@ const MinimalPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 position: "absolute",
                 top: 8,
                 left: 20,
-                fontSize: 56,
-                color: "rgba(100,140,200,0.2)",
+                fontSize: 64,
+                color: "rgba(100,140,200,0.18)",
                 fontFamily: "Georgia, serif",
                 lineHeight: 1,
                 fontWeight: 700,
@@ -847,10 +847,11 @@ const MinimalPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </span>
             <div
               style={{
-                fontSize: 30,
-                color: "#444",
-                lineHeight: 1.7,
+                fontSize: 32,
+                color: "#2d3a4a",
+                lineHeight: 1.8,
                 fontWeight: 400,
+                letterSpacing: "0.01em",
               }}
             >
               {description}
@@ -860,8 +861,8 @@ const MinimalPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 position: "absolute",
                 bottom: -8,
                 right: 28,
-                fontSize: 56,
-                color: "rgba(100,140,200,0.2)",
+                fontSize: 64,
+                color: "rgba(100,140,200,0.18)",
                 fontFamily: "Georgia, serif",
                 lineHeight: 1,
                 fontWeight: 700,
