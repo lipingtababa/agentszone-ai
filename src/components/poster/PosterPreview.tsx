@@ -323,22 +323,22 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
 
           {/* Content items */}
           <div style={{
-            marginBottom: 24,
+            marginBottom: 16,
             background: "rgba(100,160,255,0.08)",
-            borderRadius: 20,
-            padding: "24px 28px",
+            borderRadius: 16,
+            padding: "16px 20px",
             border: "1px solid rgba(100,160,255,0.15)",
           }}>
             <div
               style={{
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: 700,
                 background: "linear-gradient(90deg, #4dc4ff, #6b9eff)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                letterSpacing: "0.35em",
-                marginBottom: 20,
+                letterSpacing: "0.3em",
+                marginBottom: 14,
                 filter: "drop-shadow(0 0 12px rgba(77,196,255,0.5))",
               }}
             >
@@ -350,28 +350,28 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 style={{
                   display: "flex",
                   alignItems: "flex-start",
-                  gap: 14,
-                  marginBottom: 14,
+                  gap: 12,
+                  marginBottom: 10,
                   background: "rgba(255,255,255,0.04)",
-                  borderRadius: 10,
-                  padding: "12px 16px",
+                  borderRadius: 8,
+                  padding: "10px 14px",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
                 <div
                   style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 8,
+                    width: 28,
+                    height: 28,
+                    borderRadius: 6,
                     background: "linear-gradient(135deg, #4dc4ff, #6b8eff)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: 800,
                     color: "#ffffff",
                     flexShrink: 0,
-                    boxShadow: "0 4px 16px rgba(77,196,255,0.5)",
+                    boxShadow: "0 4px 12px rgba(77,196,255,0.4)",
                     letterSpacing: 0,
                   }}
                 >
@@ -379,12 +379,12 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 </div>
                 <span
                   style={{
-                    fontSize: 28,
+                    fontSize: 24,
                     background: "linear-gradient(90deg, rgba(220,228,255,1), rgba(180,210,255,0.9))",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
-                    lineHeight: 1.5,
+                    lineHeight: 1.4,
                     fontWeight: 500,
                     letterSpacing: "0.02em",
                   }}
