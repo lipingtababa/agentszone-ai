@@ -432,7 +432,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: 14,
-                  marginBottom: 12,
+                  marginBottom: 18,
                 }}
               >
                 <div
