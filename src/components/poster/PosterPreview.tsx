@@ -392,13 +392,24 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               paddingTop: 24,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "linear-gradient(135deg, #4ade80, #22c55e)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 4px 16px rgba(74,222,128,0.4)",
+              }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
               <span
-                style={{ fontSize: 26, fontWeight: 700, color: "#ffffff" }}
+                style={{ fontSize: 28, fontWeight: 700, color: "#ffffff", letterSpacing: "0.05em" }}
               >
                 {date}
               </span>
