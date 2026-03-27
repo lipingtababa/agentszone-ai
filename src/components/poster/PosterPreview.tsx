@@ -246,33 +246,45 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           >
             <div
               style={{
-                width: 52,
-                height: 52,
-                borderRadius: 12,
-                background: "linear-gradient(135deg, rgba(77,196,255,0.25), rgba(107,142,255,0.15))",
-                border: "1px solid rgba(77,196,255,0.4)",
+                width: 60,
+                height: 60,
+                borderRadius: 14,
+                background: "linear-gradient(135deg, rgba(77,196,255,0.35), rgba(107,142,255,0.2))",
+                border: "1px solid rgba(77,196,255,0.5)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 0 20px rgba(77,196,255,0.3), inset 0 0 15px rgba(77,196,255,0.1)",
+                boxShadow: "0 0 30px rgba(77,196,255,0.5), inset 0 0 20px rgba(77,196,255,0.15)",
               }}
             >
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+              <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
                 {/* Robot head */}
-                <rect x="7" y="8" width="16" height="14" rx="3" fill="none" stroke="#4dc4ff" strokeWidth="1.5"/>
-                {/* Eyes */}
-                <circle cx="11.5" cy="14" r="2" fill="#4dc4ff"/>
-                <circle cx="18.5" cy="14" r="2" fill="#4dc4ff"/>
+                <rect x="8" y="9" width="22" height="18" rx="4" fill="rgba(77,196,255,0.15)" stroke="#4dc4ff" strokeWidth="2"/>
+                {/* Eyes - glowing */}
+                <circle cx="15" cy="17" r="3" fill="#ffffff" filter="url(#glow)"/>
+                <circle cx="23" cy="17" r="3" fill="#ffffff" filter="url(#glow)"/>
+                <circle cx="15" cy="17" r="1.5" fill="#4dc4ff"/>
+                <circle cx="23" cy="17" r="1.5" fill="#4dc4ff"/>
                 {/* Antenna */}
-                <line x1="15" y1="8" x2="15" y2="5" stroke="#4dc4ff" strokeWidth="1.5"/>
-                <circle cx="15" cy="4" r="1.5" fill="#6b9eff"/>
+                <line x1="19" y1="9" x2="19" y2="5" stroke="#4dc4ff" strokeWidth="2"/>
+                <circle cx="19" cy="4" r="2.5" fill="#6b9eff"/>
                 {/* Ears */}
-                <rect x="4" y="12" width="3" height="6" rx="1" fill="none" stroke="#4dc4ff" strokeWidth="1.2"/>
-                <rect x="23" y="12" width="3" height="6" rx="1" fill="none" stroke="#4dc4ff" strokeWidth="1.2"/>
+                <rect x="4" y="14" width="4" height="8" rx="1.5" fill="rgba(77,196,255,0.2)" stroke="#4dc4ff" strokeWidth="1.5"/>
+                <rect x="30" y="14" width="4" height="8" rx="1.5" fill="rgba(77,196,255,0.2)" stroke="#4dc4ff" strokeWidth="1.5"/>
                 {/* Mouth */}
-                <line x1="11" y1="18" x2="19" y2="18" stroke="#6b9eff" strokeWidth="1.2"/>
+                <line x1="14" y1="23" x2="24" y2="23" stroke="#6b9eff" strokeWidth="2" strokeLinecap="round"/>
                 {/* Body hint */}
-                <rect x="10" y="22" width="10" height="4" rx="1" fill="none" stroke="#4dc4ff" strokeWidth="1" opacity="0.6"/>
+                <rect x="13" y="27" width="12" height="5" rx="2" fill="rgba(77,196,255,0.15)" stroke="#4dc4ff" strokeWidth="1.5"/>
+                {/* Glow filter */}
+                <defs>
+                  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
               </svg>
             </div>
             <span
