@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 
 const posterData = {
   ep: 18,
-  title: 'AI客服',
+  title: 'AI客服为什么讨人嫌？',
   desc: '深入探讨AI客服的业务背景、LLM时代的解决方案，以及仍存在的遗留问题。',
   items: 'AI客服业务背景和前LLM时代的问题|LLM时代AI客服的解决方案|AI客服在LLM时代下仍遗留的问题',
   date: '2026-03-28T20:00',
