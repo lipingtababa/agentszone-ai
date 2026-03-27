@@ -848,9 +848,9 @@ const MinimalPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </span>
             <div
               style={{
-                fontSize: 32,
+                fontSize: 36,
                 color: "#2d3a4a",
-                lineHeight: 1.8,
+                lineHeight: 1.65,
                 fontWeight: 400,
                 letterSpacing: "0.01em",
               }}
