@@ -478,7 +478,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               justifyContent: "space-between",
               alignItems: "flex-end",
               borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: 6,
+              paddingTop: 2,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
