@@ -220,7 +220,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             <span
               style={{
                 fontSize: 56,
-                fontWeight: 700,
+                fontWeight: 800,
                 background: "linear-gradient(90deg, #ff9d4d, #ffc87d)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
