@@ -338,12 +338,25 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                letterSpacing: "0.3em",
-                marginBottom: 14,
-                filter: "drop-shadow(0 0 12px rgba(77,196,255,0.5))",
-              }}
+              letterSpacing: "0.3em",
+              marginBottom: 14,
+            }}
             >
-              本 期 内 容
+              <span
+                style={{
+                  background: "linear-gradient(90deg, #4dc4ff, #6b9eff)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  border: "2px solid rgba(77,196,255,0.7)",
+                  borderRadius: 6,
+                  padding: "4px 14px",
+                  display: "inline-block",
+                  filter: "drop-shadow(0 0 12px rgba(77,196,255,0.5))",
+                }}
+              >
+              本期内容
+              </span>
             </div>
             {contentItems.map((item, i) => (
               <div
