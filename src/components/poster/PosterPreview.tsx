@@ -335,7 +335,9 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 backgroundClip: "text",
                 lineHeight: 2.1,
                 fontWeight: 600,
+                fontStyle: "italic",
                 letterSpacing: "0.01em",
+                fontFamily: "'Nunito', 'Quicksand', 'DIN Alternate', 'Roboto Rounded', sans-serif",
                 filter: "drop-shadow(0 0 16px rgba(100,160,255,0.35))",
               }}
             >
