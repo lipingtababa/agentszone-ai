@@ -57,7 +57,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
   } = data;
 
   const episodeLabel = `第${numberToChinese(episodeNumber)}期`;
-  const photoSize = guests.length === 1 ? 280 : guests.length === 2 ? 220 : 170;
+  const photoSize = guests.length === 1 ? 240 : guests.length === 2 ? 190 : 150;
   const titleLines = title.split("\n");
 
   if (style === "minimal") {
