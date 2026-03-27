@@ -583,7 +583,7 @@ const PersonCard: React.FC<{
       {person.subtitle && (
         <div style={{
           fontSize: 20,
-          color: "#b8c8e8",
+          color: "#d8e8ff",
           textAlign: "center",
           letterSpacing: "0.03em",
           marginTop: 4,
