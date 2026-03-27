@@ -111,7 +111,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(170deg, #2a1a5e 0%, #1e1565 20%, #191060 40%, #14104a 65%, #0e0c38 100%)",
+              "linear-gradient(170deg, #0a2a5e 0%, #0e3a6e 20%, #0a2a5e 40%, #061845 65%, #041238 100%)",
           }}
         />
 
@@ -124,7 +124,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             width: 500,
             height: 500,
             background:
-              "radial-gradient(circle, rgba(100,60,200,0.25) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(60,120,200,0.3) 0%, transparent 70%)",
             borderRadius: "50%",
           }}
         />
