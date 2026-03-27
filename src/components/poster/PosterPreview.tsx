@@ -331,7 +331,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               borderRadius: 20,
               padding: "28px 40px",
               marginBottom: 32,
-              marginTop: 90,
+              marginTop: 70,
               border: "none",
               boxShadow: "inset 0 0 60px rgba(77,196,255,0.05)",
             }}
