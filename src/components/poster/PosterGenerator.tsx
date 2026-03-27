@@ -17,8 +17,8 @@ const defaultData: PosterData = {
   guests: [
     {
       name: "陈浩",
-      title: "开发工程师",
-      subtitle: "AI先锋",
+      title: "20年架构师，客服行业从业者",
+      subtitle: "曾从事金融、政务、财务、云计算、电商等行业",
     },
   ],
   date: "2026.03.28 (周六) 20:00-21:30",
