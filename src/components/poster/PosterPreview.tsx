@@ -270,7 +270,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </span>
             <div
               style={{
-                fontSize: 34,
+                fontSize: 38,
                 color: "rgba(220,228,255,0.95)",
                 lineHeight: 1.8,
                 fontWeight: 400,
@@ -314,20 +314,19 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
 
           {/* Content items */}
           <div style={{
-            marginBottom: 36,
-            marginTop: "auto",
+            marginBottom: 24,
             background: "rgba(100,160,255,0.08)",
             borderRadius: 20,
-            padding: "28px 32px",
+            padding: "24px 28px",
             border: "1px solid rgba(100,160,255,0.15)",
           }}>
             <div
               style={{
-                fontSize: 26,
+                fontSize: 24,
                 fontWeight: 700,
                 color: "#4dc4ff",
                 letterSpacing: "0.3em",
-                marginBottom: 24,
+                marginBottom: 20,
                 textShadow: "0 0 20px rgba(77,196,255,0.4)",
               }}
             >
@@ -339,24 +338,24 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 style={{
                   display: "flex",
                   alignItems: "flex-start",
-                  gap: 16,
-                  marginBottom: 18,
+                  gap: 14,
+                  marginBottom: 14,
                   background: "rgba(255,255,255,0.04)",
-                  borderRadius: 12,
-                  padding: "14px 18px",
+                  borderRadius: 10,
+                  padding: "12px 16px",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
                 <div
                   style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
                     background: "linear-gradient(135deg, #4dc4ff, #6b8eff)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: 800,
                     color: "#ffffff",
                     flexShrink: 0,
@@ -368,9 +367,9 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 </div>
                 <span
                   style={{
-                    fontSize: 26,
+                    fontSize: 24,
                     color: "rgba(220,228,255,0.95)",
-                    lineHeight: 1.6,
+                    lineHeight: 1.5,
                     fontWeight: 500,
                     letterSpacing: "0.02em",
                   }}
