@@ -232,7 +232,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               <div
                 key={i}
                 style={{
-                  fontSize: 180,
+                  fontSize: 140,
                   fontWeight: 800,
                   background: "linear-gradient(180deg, #ffffff 0%, #a8c8ff 100%)",
                   WebkitBackgroundClip: "text",
