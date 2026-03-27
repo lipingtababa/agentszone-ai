@@ -250,7 +250,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 height: 60,
                 borderRadius: 14,
                 background: "linear-gradient(135deg, rgba(77,196,255,0.35), rgba(107,142,255,0.2))",
-                border: "1px solid rgba(77,196,255,0.5)",
+                border: "none",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
