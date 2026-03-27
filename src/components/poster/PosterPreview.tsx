@@ -240,7 +240,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 key={i}
                 style={{
                   fontSize: 180,
-                  fontWeight: 800,
+                  fontWeight: 900,
                   color: "#ffffff",
                   lineHeight: 1.1,
                   letterSpacing: "0em",
