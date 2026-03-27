@@ -5,25 +5,24 @@ import { toPng } from "html-to-image";
 
 const defaultData: PosterData = {
   forumTitle: "Agents特区论坛",
-  episodeNumber: 17,
-  title: "跨境电商行业的\nSOP改造Skill\n机遇和挑战",
+  episodeNumber: 18,
+  title: "AI客服",
   description:
-    "当AI席卷而来，特别是OpenClaw开启全民养虾之后，跨境行业如何迎接变化？纯干货分享SOP转向Skill之后如何改造，借鉴经验进行其他行业赋能。",
+    "深入探讨AI客服的业务背景、LLM时代的解决方案，以及仍存在的遗留问题。",
   contentItems: [
-    "跨境行业中如何进行SOP到Skill的改造？",
-    "跨境行业Skill改造中的问题和实战经验分享",
-    "未来Agent时代各行业该何去何从？",
+    "AI客服业务背景和前LLM时代的问题",
+    "LLM时代AI客服的解决方案",
+    "AI客服在LLM时代下仍遗留的问题",
   ],
   guests: [
     {
-      name: "Axton Wang",
-      nameCn: "王帅辉",
-      title: "10+年互联网架构师，跨境AI从业者",
-      subtitle: "日耗费10亿Token",
+      name: "陈浩",
+      title: "开发工程师",
+      subtitle: "AI先锋",
     },
   ],
-  date: "2026.03.22 (周日) 20:00",
-  meetingId: "740 886 774",
+  date: "2026.03.28 (周六) 20:00-21:30",
+  meetingId: "700 360 080",
   style: "dark" as PosterStyle,
 };
 
