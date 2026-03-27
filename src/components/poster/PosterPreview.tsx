@@ -212,7 +212,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </div>
             <span
               style={{
-                fontSize: 48,
+                fontSize: 56,
                 fontWeight: 700,
                 background: "linear-gradient(90deg, #ff9d4d, #ffc87d)",
                 WebkitBackgroundClip: "text",
@@ -232,7 +232,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               <div
                 key={i}
                 style={{
-                  fontSize: 160,
+                  fontSize: 180,
                   fontWeight: 800,
                   background: "linear-gradient(180deg, #ffffff 0%, #a8c8ff 100%)",
                   WebkitBackgroundClip: "text",
@@ -276,7 +276,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </span>
             <div
               style={{
-                fontSize: 38,
+                fontSize: 42,
                 background: "linear-gradient(90deg, rgba(180,200,255,1), rgba(140,180,255,0.9))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -331,7 +331,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           }}>
             <div
               style={{
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: 700,
                 background: "linear-gradient(90deg, #4dc4ff, #6b9eff)",
                 WebkitBackgroundClip: "text",
@@ -379,7 +379,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 </div>
                 <span
                   style={{
-                    fontSize: 24,
+                    fontSize: 28,
                     background: "linear-gradient(90deg, rgba(220,228,255,1), rgba(180,210,255,0.9))",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -424,7 +424,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               </div>
               <span
                 style={{
-                  fontSize: 28,
+                  fontSize: 32,
                   fontWeight: 700,
                   background: "linear-gradient(90deg, #ffffff, #a8ffcc)",
                   WebkitBackgroundClip: "text",
@@ -470,8 +470,8 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   </div>
                   <div
                     style={{
-                      fontSize: 20,
-                      color: "rgba(210,218,255,0.6)",
+                      fontSize: 24,
+                      color: "rgba(210,218,255,0.7)",
                       fontWeight: 500,
                     }}
                   >
@@ -479,7 +479,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   </div>
                   <div
                     style={{
-                      fontSize: 30,
+                      fontSize: 34,
                       fontWeight: 700,
                       background: "linear-gradient(90deg, #ffffff, #a8c8ff)",
                       WebkitBackgroundClip: "text",
@@ -561,7 +561,7 @@ const PersonCard: React.FC<{
       }}
     >
       <div style={{
-        fontSize: 34,
+        fontSize: 38,
         fontWeight: 700,
         background: "linear-gradient(90deg, #ffffff, #ffc87d)",
         WebkitBackgroundClip: "text",
@@ -576,7 +576,7 @@ const PersonCard: React.FC<{
         )}
       </div>
       <div style={{
-        fontSize: 20,
+        fontSize: 22,
         background: "linear-gradient(90deg, rgba(200,220,255,1), rgba(160,200,255,0.9))",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
@@ -589,7 +589,7 @@ const PersonCard: React.FC<{
       </div>
       {person.subtitle && (
         <div style={{
-          fontSize: 18,
+          fontSize: 20,
           background: "linear-gradient(90deg, rgba(180,200,255,0.9), rgba(140,180,255,0.8))",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
