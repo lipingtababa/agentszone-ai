@@ -440,12 +440,12 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 >
                   <div
                     style={{
-                      width: 120,
-                      height: 120,
+                      width: 140,
+                      height: 140,
                       borderRadius: 10,
                       overflow: "hidden",
                       background: "#ffffff",
-                      padding: 8,
+                      padding: 10,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -453,7 +453,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   >
                     <QRCodeSVG
                       value={`https://meeting.tencent.com/dm/${meetingId.replace(/\s/g, "")}`}
-                      size={104}
+                      size={120}
                       level="M"
                     />
                   </div>
