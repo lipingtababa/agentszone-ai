@@ -428,6 +428,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                     color: "#1a1a2e",
                     flexShrink: 0,
                     boxShadow: "0 2px 12px rgba(255,180,0,0.5)",
+                    fontFamily: "'Nunito', 'Quicksand', 'DIN Alternate', 'Roboto Rounded', sans-serif",
                   }}
                 >
                   {i + 1}
