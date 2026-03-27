@@ -244,7 +244,6 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   color: "#ffffff",
                   lineHeight: 1.2,
                   letterSpacing: "0.08em",
-                  textShadow: "0 0 30px rgba(100,180,255,0.8), 0 0 60px rgba(100,180,255,0.4)",
                 }}
               >
                 {line}
@@ -286,7 +285,6 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 lineHeight: 1.7,
                 fontWeight: 500,
                 letterSpacing: "0.02em",
-                textShadow: "0 2px 16px rgba(100,140,255,0.5)",
               }}
             >
               {description}
@@ -388,7 +386,6 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                     lineHeight: 1.4,
                     fontWeight: 600,
                     letterSpacing: "0.02em",
-                    textShadow: "0 1px 8px rgba(100,140,255,0.4)",
                   }}
                 >
                   {item}
@@ -430,7 +427,6 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   fontWeight: 700,
                   color: "#ffffff",
                   letterSpacing: "0.05em",
-                  textShadow: "0 0 20px rgba(74,222,128,0.6), 0 2px 8px rgba(0,0,0,0.5)",
                 }}
               >
                 {date}
@@ -482,7 +478,6 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                       fontWeight: 700,
                       color: "#ffffff",
                       letterSpacing: "0.08em",
-                      textShadow: "0 0 20px rgba(100,160,255,0.6), 0 2px 8px rgba(0,0,0,0.5)",
                     }}
                   >
                     {meetingId}
@@ -561,11 +556,10 @@ const PersonCard: React.FC<{
         fontWeight: 700,
         color: "#ffffff",
         letterSpacing: "0.1em",
-        textShadow: "0 0 20px rgba(255,200,100,0.5), 0 2px 8px rgba(0,0,0,0.5)",
       }}>
         {person.name}
         {person.nameCn && (
-          <span style={{ color: "#ffc87d", textShadow: "0 0 16px rgba(255,200,100,0.6), 0 2px 8px rgba(0,0,0,0.5)" }}> {person.nameCn}</span>
+          <span style={{ color: "#ffc87d" }}> {person.nameCn}</span>
         )}
       </div>
       <div style={{
@@ -574,7 +568,6 @@ const PersonCard: React.FC<{
         textAlign: "center",
         letterSpacing: "0.05em",
         fontWeight: 500,
-        textShadow: "0 1px 8px rgba(100,140,255,0.4)",
       }}>
         {person.title}
       </div>
@@ -585,7 +578,6 @@ const PersonCard: React.FC<{
           textAlign: "center",
           letterSpacing: "0.03em",
           marginTop: 4,
-          textShadow: "0 1px 6px rgba(100,140,255,0.3)",
         }}>
           {person.subtitle}
         </div>
