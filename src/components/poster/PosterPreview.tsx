@@ -382,16 +382,35 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             </div>
             {meetingId && (
               <div
-                style={{ display: "flex", alignItems: "center", gap: 18 }}
+                style={{ display: "flex", alignItems: "flex-end", gap: 14 }}
               >
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "flex-end",
-                    gap: 4,
+                    alignItems: "center",
+                    gap: 6,
                   }}
                 >
+                  <div
+                    style={{
+                      width: 120,
+                      height: 120,
+                      borderRadius: 10,
+                      overflow: "hidden",
+                      background: "#ffffff",
+                      padding: 8,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <QRCodeSVG
+                      value={`https://meeting.tencent.com/dm/${meetingId.replace(/\s/g, "")}`}
+                      size={104}
+                      level="M"
+                    />
+                  </div>
                   <div
                     style={{
                       fontSize: 20,
@@ -411,25 +430,6 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                   >
                     {meetingId}
                   </div>
-                </div>
-                <div
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: 10,
-                    overflow: "hidden",
-                    background: "#ffffff",
-                    padding: 8,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <QRCodeSVG
-                    value={`https://meeting.tencent.com/dm/${meetingId.replace(/\s/g, "")}`}
-                    size={104}
-                    level="M"
-                  />
                 </div>
               </div>
             )}
