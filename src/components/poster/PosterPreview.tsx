@@ -258,17 +258,21 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               }}
             >
               <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                {/* Outer hexagon */}
-                <polygon points="15,2 26,8.5 26,21.5 15,28 4,21.5 4,8.5" fill="none" stroke="#4dc4ff" strokeWidth="1.5" opacity="0.8"/>
-                {/* Inner hexagon */}
-                <polygon points="15,7 21,11 21,19 15,23 9,19 9,11" fill="rgba(77,196,255,0.15)" stroke="#6b9eff" strokeWidth="1" opacity="0.9"/>
-                {/* Center dot */}
-                <circle cx="15" cy="15" r="3" fill="#4dc4ff" opacity="0.9"/>
-                {/* Circuit lines */}
-                <line x1="15" y1="7" x2="15" y2="12" stroke="#4dc4ff" strokeWidth="1.5" opacity="0.7"/>
-                <line x1="15" y1="18" x2="15" y2="23" stroke="#4dc4ff" strokeWidth="1.5" opacity="0.7"/>
-                <line x1="9" y1="15" x2="12" y2="15" stroke="#6b9eff" strokeWidth="1.5" opacity="0.7"/>
-                <line x1="18" y1="15" x2="21" y2="15" stroke="#6b9eff" strokeWidth="1.5" opacity="0.7"/>
+                {/* Robot head */}
+                <rect x="7" y="8" width="16" height="14" rx="3" fill="none" stroke="#4dc4ff" strokeWidth="1.5"/>
+                {/* Eyes */}
+                <circle cx="11.5" cy="14" r="2" fill="#4dc4ff"/>
+                <circle cx="18.5" cy="14" r="2" fill="#4dc4ff"/>
+                {/* Antenna */}
+                <line x1="15" y1="8" x2="15" y2="5" stroke="#4dc4ff" strokeWidth="1.5"/>
+                <circle cx="15" cy="4" r="1.5" fill="#6b9eff"/>
+                {/* Ears */}
+                <rect x="4" y="12" width="3" height="6" rx="1" fill="none" stroke="#4dc4ff" strokeWidth="1.2"/>
+                <rect x="23" y="12" width="3" height="6" rx="1" fill="none" stroke="#4dc4ff" strokeWidth="1.2"/>
+                {/* Mouth */}
+                <line x1="11" y1="18" x2="19" y2="18" stroke="#6b9eff" strokeWidth="1.2"/>
+                {/* Body hint */}
+                <rect x="10" y="22" width="10" height="4" rx="1" fill="none" stroke="#4dc4ff" strokeWidth="1" opacity="0.6"/>
               </svg>
             </div>
             <span
