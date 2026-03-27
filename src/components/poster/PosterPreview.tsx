@@ -101,7 +101,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           transformOrigin: "top left",
           position: "relative",
           fontFamily:
-            "'SF Pro Display', 'DIN Alternate', 'Roboto', 'Noto Sans SC', 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif",
+            "'Noto Serif SC', 'Source Han Serif SC', 'STSongti', 'SimSun', 'Georgia', serif",
           overflow: "hidden",
         }}
       >
