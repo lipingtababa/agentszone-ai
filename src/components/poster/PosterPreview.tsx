@@ -239,11 +239,11 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               <div
                 key={i}
                 style={{
-                  fontSize: 160,
+                  fontSize: 180,
                   fontWeight: 900,
                   color: "#ffffff",
-                  lineHeight: 1.2,
-                  letterSpacing: "0.08em",
+                  lineHeight: 1.1,
+                  letterSpacing: "0.03em",
                 }}
               >
                 {line}
