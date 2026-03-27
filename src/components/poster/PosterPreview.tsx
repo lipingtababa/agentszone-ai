@@ -473,12 +473,12 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           {/* Bottom bar */}
           <div
             style={{
-              marginTop: 0,
+              marginTop: -180,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
               borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: -4,
+              paddingTop: 4,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -1028,7 +1028,7 @@ const MinimalPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
           {/* Bottom bar */}
           <div
             style={{
-              marginTop: "auto",
+              marginTop: 240,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
@@ -1558,7 +1558,7 @@ const GlassPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
           {/* Bottom bar */}
           <div
             style={{
-              marginTop: "auto",
+              marginTop: 240,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
