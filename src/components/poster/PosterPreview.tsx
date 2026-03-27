@@ -383,12 +383,12 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           {/* Bottom bar */}
           <div
             style={{
-              marginTop: "auto",
+              marginTop: 16,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
               borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: 24,
+              paddingTop: 16,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
