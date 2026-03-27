@@ -586,7 +586,7 @@ const PersonCard: React.FC<{
         height: photoSize,
         borderRadius: "50%",
         overflow: "hidden",
-        border: "3px solid rgba(255,255,255,0.15)",
+        border: "4px solid rgba(255,255,255,0.15)",
         boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
       }}
     >
