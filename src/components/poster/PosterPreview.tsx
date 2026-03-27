@@ -393,11 +393,11 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
             >
               <span
                 style={{
-                  background: "linear-gradient(90deg, #4dc4ff, #6b9eff)",
+                  background: "linear-gradient(90deg, #ffd700, #ffaa00)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                  filter: "drop-shadow(0 0 12px rgba(77,196,255,0.5))",
+                  filter: "drop-shadow(0 0 12px rgba(255,180,0,0.5))",
                 }}
               >
               本期内容
