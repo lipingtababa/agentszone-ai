@@ -333,7 +333,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                lineHeight: 1.8,
+                lineHeight: 2,
                 fontWeight: 600,
                 letterSpacing: "0.01em",
                 filter: "drop-shadow(0 0 16px rgba(100,160,255,0.35))",
