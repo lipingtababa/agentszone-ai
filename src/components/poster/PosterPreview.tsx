@@ -248,7 +248,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
               borderRadius: 20,
               padding: "28px 40px",
               marginBottom: 32,
-              marginTop: 80,
+              marginTop: 160,
             }}
           >
             <span
