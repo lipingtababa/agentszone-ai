@@ -473,7 +473,7 @@ export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
           {/* Bottom bar */}
           <div
             style={{
-              marginTop: 2,
+              marginTop: 0,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
