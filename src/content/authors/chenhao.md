@@ -1,7 +1,6 @@
 ---
 name: 陈浩
 bio: 架构师，近二十年一线开发经验，现专注 AI 客服与智能对话系统。
-role: community
 tags: [ai-coding, architecture, customer-service]
 since: "2026-01"
 ---

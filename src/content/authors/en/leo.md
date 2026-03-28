@@ -1,7 +1,6 @@
 ---
 name: Leo
 bio: Securities industry AI coding advocate, exploring enterprise AI Coding adoption under strict compliance constraints.
-role: community
 tags: [ai-coding, enterprise, methodology]
 since: "2026-01"
 ---

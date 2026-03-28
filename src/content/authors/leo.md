@@ -1,7 +1,6 @@
 ---
 name: Leo
 bio: 券商 AI 编程推动者，在合规受限环境中探索企业级 AI Coding 落地路径。
-role: community
 tags: [ai-coding, enterprise, methodology]
 since: "2026-01"
 ---
