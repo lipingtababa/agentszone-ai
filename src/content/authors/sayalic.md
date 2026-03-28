@@ -1,9 +1,7 @@
 ---
 name: 简白 (Sayalic)
 bio: AI Native 工程实践者，专注需求定义驱动的一人开发方法论。
-role: community
 tags: [ai-native, methodology, one-man-army]
-since: "2026-01"
 ---
 
 AI Native 工程实践者，Agents 特区早期成员。

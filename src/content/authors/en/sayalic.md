@@ -1,9 +1,7 @@
 ---
 name: Sayalic (简白)
 bio: AI Native engineering practitioner focused on requirements-driven one-man development methodology.
-role: community
 tags: [ai-native, methodology, one-man-army]
-since: "2026-01"
 ---
 
 AI Native engineering practitioner and early member of AgentsZone.

@@ -1,9 +1,7 @@
 ---
 name: Chen Hao
 bio: Architect with nearly 20 years of hands-on development experience, now focused on AI customer service and intelligent dialogue systems.
-role: community
 tags: [ai-coding, architecture, customer-service]
-since: "2026-01"
 ---
 
 Nearly two decades of software development and architecture experience spanning finance, government, accounting, cloud computing, and e-commerce. Currently working in the AI customer service space.
