@@ -2,14 +2,14 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ArticleCard from '../../../components/ArticleCard.astro';
-import { useTranslations, localePath } from '../../../i18n/utils';
+import { useTranslations } from '../../../i18n/utils';
 
 export async function getStaticPaths() {
   const authorsEn = await getCollection('authorsEn');
   const allArticles = await getCollection('articlesEn');
   const authorMap = new Map(authorsEn.map((a) => [a.id, a.data.name]));
 
-  return authorsEn.filter((a) => a.data.role !== 'community').map((author) => ({
+  return authorsEn.map((author) => ({
     params: { id: author.id },
     props: {
       author,
@@ -29,11 +29,6 @@ const { author, articles, authorMap } = Astro.props;
 const { name, bio, website, github, twitter, avatar } = author.data;
 const { Content } = await render(author);
 
-// Check if they have a community page
-const allAuthorsForLink = await getCollection('authorsEn');
-const communityProfileId = author.data.influence
-  ? author.id
-  : allAuthorsForLink.find((a) => a.id !== author.id && a.data.influence && a.data.name === name)?.id;
 ---
 
 <BaseLayout
@@ -89,17 +84,6 @@ const communityProfileId = author.data.influence
       </div>
     </div>
   </div>
-
-  {communityProfileId && (
-    <div class="mb-8 rounded-lg border border-[var(--color-surface-border)] p-4">
-      <p class="text-sm text-[var(--color-text-muted)]">
-        💬 View this member's community profile (auto-extracted from group discussions) →
-        <a href={localePath('en', `/community/${communityProfileId}`)} class="text-[var(--color-accent)] hover:underline">
-          Community page
-        </a>
-      </p>
-    </div>
-  )}
 
   <div class="prose mb-12">
     <Content />

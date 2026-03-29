@@ -5,8 +5,7 @@ import AuthorBadge from '../../../components/AuthorBadge.astro';
 import { useTranslations } from '../../../i18n/utils';
 
 const t = useTranslations('en');
-const allAuthors = await getCollection('authorsEn');
-const authors = allAuthors.filter((a) => a.data.role !== 'community');
+const authors = await getCollection('authorsEn');
 ---
 
 <BaseLayout
