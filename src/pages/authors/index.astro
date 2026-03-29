@@ -3,18 +3,17 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AuthorBadge from '../../components/AuthorBadge.astro';
 
-const allAuthors = await getCollection('authors');
-const authors = allAuthors.filter((a) => a.data.role !== 'community');
+const authors = await getCollection('authors');
 ---
 
 <BaseLayout
-  title="作者 | Agents 特区"
-  description="认识分享AI agent管理经验的一线实践者。"
+  title="贡献者 | Agents 特区"
+  description="一起重新定义 Agent 时代软件工程的实践者。"
 >
   <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-    作者
+    贡献者
   </h1>
-  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">分享AI agent管理经验的一线实践者</p>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">一起重新定义 Agent 时代软件工程的实践者</p>
   <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))">
     {authors.map((author) => <AuthorBadge author={author} />)}
   </div>
