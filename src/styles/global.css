@@ -97,7 +97,7 @@ body {
 
 /* 文章正文样式 */
 .prose {
-  max-width: 65ch;
+  max-width: 75ch;
   font-size: 1.0625rem;
   line-height: 1.8;
   color: var(--color-text-primary);
