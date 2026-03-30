@@ -1,6 +1,6 @@
 ---
-name: 马驰
-bio: Agents 特区发起人，Harness Engineering 一线实践者。二十年软件工程经验，现居斯德哥尔摩。
+name: 瑞典马工
+bio: 马驰，Agents 特区发起人，Harness Engineering 一线实践者。二十年软件工程经验。
 github: lipingtababa
 website: https://magong.se
 avatar: /images/authors/magong.jpg
