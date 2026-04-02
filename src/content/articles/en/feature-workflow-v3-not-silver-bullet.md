@@ -1,3 +1,12 @@
+---
+title: "Feature Workflow v3: From Templates to Tailored Design — AI Workflows Are No Silver Bullet"
+description: "Feature Workflow v3 upgrades to a Command + Agent + Skill three-layer architecture. The core insight: template-based workflows are not silver bullets — every project needs purpose-built Skill design."
+author: yang-zhengwu
+date: 2026-04-02
+tags: [ai-agent, skill-design, workflow, ailock-step, customization]
+original_url: https://imcoders.cn/blog/feature-workflow-v3/
+---
+
 ## Introduction
 
 In a previous article, I introduced Feature Workflow — a multi-feature parallel development paradigm based on Git Worktree. After several real-world projects, the workflow evolved from v1 to v3. This update isn't just a technical refactoring — it's a rethinking of AI workflow design philosophy.
@@ -8,11 +17,11 @@ One core point needs to be stated upfront: **Template-based workflows are no sil
 
 ### From v1 to v3
 
-| Version | Architecture                                     | Core Problem                                                        |
-| ------- | ------------------------------------------------ | ------------------------------------------------------------------- |
-| v1      | Pure Skill chain calls                           | Main session blocked, dev details pollute context                   |
-| v2      | Shell scripts + `claude --print`                 | Black-box processes, no real-time intervention, crude communication |
-| v3      | Command + Agent + Skill three-layer architecture | Native integration, context isolation, full lifecycle automation    |
+| Version | Architecture | Core Problem |
+| -- | -- | -- |
+| v1 | Pure Skill chain calls | Main session blocked, dev details pollute context |
+| v2 | Shell scripts + `claude --print` | Black-box processes, no real-time intervention, crude communication |
+| v3 | Command + Agent + Skill three-layer architecture | Native integration, context isolation, full lifecycle automation |
 
 In the v1 era, all operations ran in the main session. The AI's development context mixed with the user's conversation context, quickly bloating the session. v2 tried to isolate via Shell scripts launching independent processes, but `claude --print` runs in non-interactive mode — once launched, you can't intervene, and communication relies solely on file polling. v3 solves all of this.
 
@@ -52,13 +61,10 @@ start-feature (create branch + worktree)
 
 Fully autonomous. When encountering problems, it follows the full-automation principle:
 
-* Test failure → fix code → rerun tests (max 2 retries)
-
-* Rebase conflict → analyze conflict → smart merge → re-verify
-
-* Lint error → fix code → rerun lint
-
-* Multiple retries still failing → return error (with detailed diagnostics), don't block other features
+- Test failure → fix code → rerun tests (max 2 retries)
+- Rebase conflict → analyze conflict → smart merge → re-verify
+- Lint error → fix code → rerun lint
+- Multiple retries still failing → return error (with detailed diagnostics), don't block other features
 
 ## Key Design Upgrades
 
@@ -124,11 +130,9 @@ The key principle is splitting by **user value**, not by technical layers. Split
 
 Each feature's spec.md now includes Gherkin-formatted acceptance scenarios. The verification phase automatically selects the appropriate method based on feature type:
 
-* **Backend**: AI code analysis validates Gherkin scenarios
-
-* **Frontend**: Playwright MCP executes browser tests with automatic screenshot evidence
-
-* **Fullstack**: Combined approach
+- **Backend**: AI code analysis validates Gherkin scenarios
+- **Frontend**: Playwright MCP executes browser tests with automatic screenshot evidence
+- **Fullstack**: Combined approach
 
 After verification, a complete acceptance report is generated with screenshots and trace files for each step.
 
@@ -136,10 +140,10 @@ After verification, a complete acceptance report is generated with screenshots a
 
 A `.loop-active` marker distinguishes between auto-loop mode and manual mode:
 
-| Mode                   | Condition                    | Behavior                               |
-| ---------------------- | ---------------------------- | -------------------------------------- |
-| `/dev-agent` auto-loop | `.loop-active` exists        | Only checks continuation switch        |
-| Manual mode            | `.loop-active` doesn't exist | Main switch false → allow pass-through |
+| Mode | Condition | Behavior |
+| -- | -- | -- |
+| `/dev-agent` auto-loop | `.loop-active` exists | Only checks continuation switch |
+| Manual mode | `.loop-active` doesn't exist | Main switch false → allow pass-through |
 
 This prevents manual operations (like `/new-feature`) from being incorrectly intercepted.
 
@@ -153,13 +157,10 @@ Many people take a workflow template, apply it directly to their project, find i
 
 Common problems with template-based workflows:
 
-* **Context mismatch**: The Skill granularity defined in the template doesn't suit the current project's tech stack and code scale
-
-* **Rigid verification strategy**: Frontend projects need Playwright acceptance testing, backend API projects need integration tests, pure algorithm projects may only need unit tests
-
-* **Over-engineered parallelism**: Small projects don't need parallel development at all — forcing it adds management complexity
-
-* **Bloated documentation templates**: For a requirement completable in a week, writing full spec + task + checklist is over-engineering
+- **Context mismatch**: The Skill granularity defined in the template doesn't suit the current project's tech stack and code scale
+- **Rigid verification strategy**: Frontend projects need Playwright acceptance testing, backend API projects need integration tests, pure algorithm projects may only need unit tests
+- **Over-engineered parallelism**: Small projects don't need parallel development at all — forcing it adds management complexity
+- **Bloated documentation templates**: For a requirement completable in a week, writing full spec + task + checklist is over-engineering
 
 ### Every Project Needs Custom Skill Design
 
@@ -167,33 +168,24 @@ When applying Feature Workflow across different projects, I redesign Skills base
 
 **Project A (Large Full-Stack Application)**:
 
-* Complex tech stack (React + Node.js + PostgreSQL)
-
-* Team collaboration, strict documentation standards needed
-
-* Uses all 11 Skills + Gherkin acceptance + Playwright testing
-
-* Parallelism set to 2, dependency management required
+- Complex tech stack (React + Node.js + PostgreSQL)
+- Team collaboration, strict documentation standards needed
+- Uses all 11 Skills + Gherkin acceptance + Playwright testing
+- Parallelism set to 2, dependency management required
 
 **Project B (Python CLI Tool)**:
 
-* Solo developer, simple tech stack
-
-* Only keeps core 5 Skills (new/start/implement/verify/complete)
-
-* Verification only does pytest + lint, no Playwright needed
-
-* Parallelism set to 1, simplified queue management
+- Solo developer, simple tech stack
+- Only keeps core 5 Skills (new/start/implement/verify/complete)
+- Verification only does pytest + lint, no Playwright needed
+- Parallelism set to 1, simplified queue management
 
 **Project C (Data Pipeline Service)**:
 
-* Backend-focused, emphasis on data correctness
-
-* Verification strategy focuses on data validation and integration tests
-
-* New Skill added for data migration rollback
-
-* Archive strategy includes data snapshots
+- Backend-focused, emphasis on data correctness
+- Verification strategy focuses on data validation and integration tests
+- New Skill added for data migration rollback
+- Archive strategy includes data snapshots
 
 ### Dimensions of Customization
 
@@ -243,22 +235,15 @@ Phase 4: Advanced features (Playwright acceptance, feature splitting)
 
 Skills aren't designed once and done. After completing a few features, review actual Skill performance:
 
-* Which steps does AI frequently get wrong?
-
-* What's the auto-fix success rate in the verification phase?
-
-* Is the feature splitting granularity appropriate?
-
-* Does the project context need updating?
+- Which steps does AI frequently get wrong?
+- What's the auto-fix success rate in the verification phase?
+- Is the feature splitting granularity appropriate?
+- Does the project context need updating?
 
 Use this feedback to continuously adjust Skill prompt design and configuration parameters.
 
 ## Resources
 
-* [Feature Workflow v3 Source Code](https://github.com/auenger/AILock-Step/tree/feature/dev-agent-subagent-optimization/feature-workflow)
-
-* [AILock-Step Protocol Documentation](https://github.com/auenger/AILock-Step)
-
-* [AILock-Step Protocol Introduction](https://agentszone.ai/articles/ailock-step-protocol)
-
-⠀
+- [Feature Workflow v3 Source Code](https://github.com/auenger/AILock-Step/tree/feature/dev-agent-subagent-optimization/feature-workflow)
+- [AILock-Step Protocol Documentation](https://github.com/auenger/AILock-Step)
+- [AILock-Step Protocol Introduction](https://agentszone.ai/articles/ailock-step-protocol)

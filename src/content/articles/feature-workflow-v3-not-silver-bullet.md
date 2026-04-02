@@ -1,3 +1,12 @@
+---
+title: "Feature Workflow v3：从模板化到定制化，AI 工作流不是银弹"
+description: "Feature Workflow v3 架构升级到 Command + Agent + Skill 三层架构。核心观点：模板化工作流不是银弹，每个项目都需要针对性设计 Skill。"
+author: yang-zhengwu
+date: 2026-04-02
+tags: [ai-agent, skill-design, workflow, ailock-step, customization]
+original_url: https://imcoders.cn/blog/feature-workflow-v3/
+---
+
 ## 引言
 
 在之前的文章中，我介绍了 Feature Workflow 基于 Git Worktree 的多特性并行开发范式。经过几个实际项目的落地验证，工作流经历了从 v1 到 v3 的架构演进。这次更新不只是技术层面的重构，更是一次关于 AI 工作流设计哲学的重新思考。
@@ -8,10 +17,10 @@
 
 ### 从 v1 到 v3 的变化路径
 
-| 版本 | 架构                           | 核心问题                |
-| -- | ---------------------------- | ------------------- |
-| v1 | 纯 Skill 链式调用                 | 主会话被阻塞，开发细节污染上下文    |
-| v2 | Shell 脚本 + `claude --print`  | 进程黑盒，无法实时干预，通信机制简陋  |
+| 版本 | 架构 | 核心问题 |
+| -- | -- | -- |
+| v1 | 纯 Skill 链式调用 | 主会话被阻塞，开发细节污染上下文 |
+| v2 | Shell 脚本 + `claude --print` | 进程黑盒，无法实时干预，通信机制简陋 |
 | v3 | Command + Agent + Skill 三层架构 | 原生集成，上下文隔离，全生命周期自动化 |
 
 v1 时代，所有操作都在主会话中执行，AI 的开发上下文和用户的对话上下文混在一起，会话很快变得臃肿。v2 试图通过 Shell 脚本启动独立进程来隔离，但 `claude --print` 是非交互模式，启动后无法干预，通信只能通过文件轮询。v3 彻底解决了这些问题。
@@ -52,13 +61,10 @@ start-feature (创建分支 + worktree)
 
 全程无人值守。遇到问题时遵循全自动原则：
 
-* 测试失败 → 修复代码 → 重跑测试（最多 2 次）
-
-* Rebase 冲突 → 分析冲突 → 智能合并 → 重新验证
-
-* Lint 报错 → 修复代码 → 重跑 lint
-
-* 多次重试仍失败 → 返回 error（附带详细诊断），不阻塞其他 feature
+- 测试失败 → 修复代码 → 重跑测试（最多 2 次）
+- Rebase 冲突 → 分析冲突 → 智能合并 → 重新验证
+- Lint 报错 → 修复代码 → 重跑 lint
+- 多次重试仍失败 → 返回 error（附带详细诊断），不阻塞其他 feature
 
 ## 关键设计升级
 
@@ -124,11 +130,9 @@ feat-auth-permission → 用户能管理权限 (依赖 login)
 
 每个 feature 的 spec.md 现在包含 Gherkin 格式的验收场景，验证阶段根据类型自动选择验收方式：
 
-* **Backend**: AI 代码分析验证 Gherkin 场景
-
-* **Frontend**: Playwright MCP 执行浏览器测试，自动截图保存证据
-
-* **Fullstack**: 混合方式
+- **Backend**: AI 代码分析验证 Gherkin 场景
+- **Frontend**: Playwright MCP 执行浏览器测试，自动截图保存证据
+- **Fullstack**: 混合方式
 
 验证完成后生成完整的验收报告，包含每一步的截图和 trace 文件。
 
@@ -136,10 +140,10 @@ feat-auth-permission → 用户能管理权限 (依赖 login)
 
 通过 `.loop-active` marker 区分自动循环模式和手动模式：
 
-| 模式                | 判断条件               | 说明            |
-| ----------------- | ------------------ | ------------- |
-| `/dev-agent` 自动循环 | `.loop-active` 存在  | 只看续跑开关        |
-| 手动模式              | `.loop-active` 不存在 | 主开关 false 则放行 |
+| 模式 | 判断条件 | 说明 |
+| -- | -- | -- |
+| `/dev-agent` 自动循环 | `.loop-active` 存在 | 只看续跑开关 |
+| 手动模式 | `.loop-active` 不存在 | 主开关 false 则放行 |
 
 这避免了手动操作（如 `/new-feature`）被误拦截。
 
@@ -153,13 +157,10 @@ feat-auth-permission → 用户能管理权限 (依赖 login)
 
 模板化工作流的典型问题：
 
-* **上下文不匹配**：模板定义的 Skill 粒度不适合当前项目的技术栈和代码规模
-
-* **验证策略僵化**：前端项目需要 Playwright 验收，后端 API 项目需要接口测试，纯算法项目可能只需要单元测试
-
-* **并行策略过度**：小项目根本不需要并行开发，强行使用反而增加管理复杂度
-
-* **文档模板冗余**：对于一周能完成的小需求，写完整的 spec + task + checklist 是过度工程
+- **上下文不匹配**：模板定义的 Skill 粒度不适合当前项目的技术栈和代码规模
+- **验证策略僵化**：前端项目需要 Playwright 验收，后端 API 项目需要接口测试，纯算法项目可能只需要单元测试
+- **并行策略过度**：小项目根本不需要并行开发，强行使用反而增加管理复杂度
+- **文档模板冗余**：对于一周能完成的小需求，写完整的 spec + task + checklist 是过度工程
 
 ### 每个项目都需要重新设计 Skill
 
@@ -167,33 +168,24 @@ feat-auth-permission → 用户能管理权限 (依赖 login)
 
 **项目 A（大型全栈应用）**：
 
-* 技术栈复杂（React + Node.js + PostgreSQL）
-
-* 团队协作，需要严格的文档规范
-
-* 使用完整 11 个 Skills + Gherkin 验收 + Playwright 测试
-
-* 并行数设为 2，需要依赖管理
+- 技术栈复杂（React + Node.js + PostgreSQL）
+- 团队协作，需要严格的文档规范
+- 使用完整 11 个 Skills + Gherkin 验收 + Playwright 测试
+- 并行数设为 2，需要依赖管理
 
 **项目 B（Python CLI 工具）**：
 
-* 单人开发，技术栈简单
-
-* 只保留核心 5 个 Skills（new/start/implement/verify/complete）
-
-* 验证阶段只做 pytest + lint，不需要 Playwright
-
-* 并行数设为 1，简化队列管理
+- 单人开发，技术栈简单
+- 只保留核心 5 个 Skills（new/start/implement/verify/complete）
+- 验证阶段只做 pytest + lint，不需要 Playwright
+- 并行数设为 1，简化队列管理
 
 **项目 C（数据管道服务）**：
 
-* 后端为主，强调数据正确性
-
-* 验证策略重点在数据校验和集成测试
-
-* 新增数据迁移回滚的 Skill
-
-* 归档策略包含数据快照
+- 后端为主，强调数据正确性
+- 验证策略重点在数据校验和集成测试
+- 新增数据迁移回滚的 Skill
+- 归档策略包含数据快照
 
 ### 定制化的设计维度
 
@@ -243,22 +235,15 @@ Phase 4: 增强功能（Playwright 验收、需求切分）
 
 Skill 不是一次设计就定型的。每完成几个 feature 后，回顾 Skill 的实际表现：
 
-* AI 在哪些步骤容易出错？
-
-* 验证阶段的自动修复成功率如何？
-
-* 需求切分的粒度是否合适？
-
-* 项目上下文是否需要更新？
+- AI 在哪些步骤容易出错？
+- 验证阶段的自动修复成功率如何？
+- 需求切分的粒度是否合适？
+- 项目上下文是否需要更新？
 
 根据这些反馈持续调整 Skill 的 prompt 设计和配置参数。
 
 ## 相关资源
 
-* [Feature Workflow v3 源码](https://github.com/auenger/AILock-Step/tree/feature/dev-agent-subagent-optimization/feature-workflow)
-
-* [AILock-Step 协议文档](https://github.com/auenger/AILock-Step)
-
-* [AILock-Step 协议介绍](https://agentszone.ai/articles/ailock-step-protocol)
-
-⠀
+- [Feature Workflow v3 源码](https://github.com/auenger/AILock-Step/tree/feature/dev-agent-subagent-optimization/feature-workflow)
+- [AILock-Step 协议文档](https://github.com/auenger/AILock-Step)
+- [AILock-Step 协议介绍](https://agentszone.ai/articles/ailock-step-protocol)
