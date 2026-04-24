@@ -41,6 +41,10 @@ const { Content } = await render(author);
         <img
           src={avatar}
           alt={name}
+          width="96"
+          height="96"
+          loading="lazy"
+          decoding="async"
           class="h-24 w-24 rounded-full object-cover ring-2 ring-[var(--color-surface-border)] shrink-0"
         />
       )}

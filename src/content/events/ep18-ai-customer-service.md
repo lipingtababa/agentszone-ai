@@ -4,6 +4,7 @@ title: AI客服为什么讨人嫌？
 description: 深入探讨AI客服的业务背景、LLM时代AI客服的解决方案以及在LLM时代AI客服领域仍遗留的问题。
 date: 2026-03-28
 speakers: [陈浩]
+poster: /images/events/ep18-ai-customer-service.jpg
 tags: [ai-customer-service, llm, enterprise]
 ---
 

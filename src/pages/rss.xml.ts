@@ -6,7 +6,7 @@ export async function GET(context: APIContext) {
   const articles = await getCollection('articles', ({ data }) => !data.draft);
 
   return rss({
-    title: 'Agents 特区',
+    title: 'Agent 特区',
     description:
       '一线实践者的AI agent管理经验，从个人探索到组织级实践。',
     site: context.site!,

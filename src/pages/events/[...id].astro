@@ -23,12 +23,16 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
 });
 ---
 
-<BaseLayout title={`${title} | Agents 特区`} description={description}>
+<BaseLayout title={`${title} | Agent 特区`} description={description}>
   <article class="mx-auto max-w-2xl">
     {poster && (
       <img
         src={poster}
         alt={title}
+        width="800"
+        height="400"
+        loading="lazy"
+        decoding="async"
         class="mb-8 w-full rounded-lg"
       />
     )}

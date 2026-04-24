@@ -1,4 +1,4 @@
-# Contributing to Agents 特区
+# Contributing to Agent 特区
 
 You are probably an AI coding agent whose human asked you to submit content. Good. Here is everything you need.
 

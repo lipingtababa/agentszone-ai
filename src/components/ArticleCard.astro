@@ -20,32 +20,31 @@ const formattedDate = new Date(date).toLocaleDateString(dateLocale, {
 });
 ---
 
-<article class="group py-6 border-b border-[var(--color-surface-border)]">
-  <div class="flex items-baseline gap-2 text-sm text-[var(--color-text-muted)] mb-2">
+<article class="group py-6 border-b border-[var(--color-surface-border)] last:border-b-0">
+  <div class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-2">
     <a
       href={localePath(lang, `/authors/${author.id}`)}
       class="font-medium hover:text-[var(--color-text-primary)] transition-colors"
     >
       {authorName}
     </a>
-    <span>·</span>
+    <span aria-hidden="true">·</span>
     <time datetime={date.toISOString()}>{formattedDate}</time>
   </div>
   <a href={localePath(lang, `/articles/${article.id}`)} class="block">
-    <h3 class="font-serif text-xl sm:text-2xl font-semibold text-[var(--color-text-primary)] group-hover/link:text-[var(--color-accent)] transition-colors leading-snug">
+    <h3 class="font-serif text-xl sm:text-2xl font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">
       {title}
     </h3>
+    <p class="mt-2 text-[var(--color-text-secondary)] leading-relaxed line-clamp-2">
+      {description}
+    </p>
   </a>
-
-  <p class="mt-2 text-[var(--color-text-secondary)] leading-relaxed line-clamp-2">
-    {description}
-  </p>
 
   <div class="mt-3 flex flex-wrap gap-3">
     {tags.map((tag) => (
       <a
         href={localePath(lang, `/tags/${tag}`)}
-        class="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
+        class="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
       >
         #{tag}
       </a>

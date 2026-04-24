@@ -10,72 +10,409 @@ const t = useTranslations(lang);
 const allArticles = await getCollection('articles', ({ data }) => {
   return import.meta.env.PROD ? !data.draft : true;
 });
-
 const articles = allArticles
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 5);
 
-const authors = await getCollection('authors');
-const authorMap = new Map(authors.map((a) => [a.id, a.data.name]));
+const allAuthors = await getCollection('authors');
+const authorMap = new Map(allAuthors.map((a) => [a.id, a.data.name]));
 
-const sections = [
-  { title: t('home.section.articles'), desc: t('home.section.articles.desc'), href: localePath(lang, '/articles') },
-  { title: t('home.section.discussions'), desc: t('home.section.discussions.desc'), href: localePath(lang, '/discussions') },
-  { title: t('home.section.events'), desc: t('home.section.events.desc'), href: localePath(lang, '/events') },
-  { title: t('home.section.authors'), desc: t('home.section.authors.desc'), href: localePath(lang, '/authors') },
-];
+// Featured authors (those with avatars, sorted by appearance)
+const featuredAuthors = allAuthors
+  .filter((a) => a.data.avatar)
+  .slice(0, 5);
+
+const allEvents = await getCollection('events');
+const sortedEvents = allEvents.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+// Latest event
+const latestEvent = sortedEvents[0];
+// Latest event with a poster for visual display
+const latestEventWithPoster = sortedEvents.find((e) => e.data.poster);
+
+// Stats
+const articleCount = allArticles.filter((a) => !a.data.draft).length;
+const authorCount = allAuthors.length;
+const eventCount = allEvents.length;
 ---
 
 <BaseLayout
   title={t('site.name')}
   description={t('site.description')}
 >
-  <!-- Hero Section -->
-  <section class="mb-16 pt-8">
-    <h1 class="font-serif text-4xl sm:text-5xl font-semibold tracking-tight text-[var(--color-text-primary)] leading-tight">
-      {t('home.hero.title')}
-    </h1>
-    <p class="mt-6 text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-2xl">
-      {t('home.hero.p1')}
-    </p>
-    <p class="mt-4 text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-2xl">
-      {t('home.hero.p2')}
-    </p>
-    <p class="mt-4 text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-2xl">
-      {t('home.hero.p3')}
-    </p>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="reveal hero-bg-grid relative min-h-[72vh] flex items-center pt-16 pb-24 overflow-hidden -mx-6 px-6 rounded-2xl mb-8">
+
+    <!-- Network SVG: absolute, anchored to top-right, bleeds outside hero boundary -->
+    <div class="pointer-events-none absolute -top-10 -right-20 w-[520px] xl:w-[640px] 2xl:w-[720px]" aria-hidden="true">
+      <svg viewBox="-10 -10 340 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full opacity-75">
+        <defs>
+          <radialGradient id="cg" cx="55%" cy="45%" r="50%">
+            <stop offset="0%"   stop-color="#e0704a" stop-opacity="0.5"/>
+            <stop offset="40%"  stop-color="#c45c3e" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#c45c3e" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="cg-blue" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#6366f1" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="cg-cyan" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#06b6d4" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="cg-amber" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#f59e0b" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow2" x="-140%" y="-140%" width="380%" height="380%">
+            <feGaussianBlur stdDeviation="8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-blue" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-cyan" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-amber" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- orbit ellipses -->
+        <ellipse cx="178" cy="138" rx="130" ry="118" stroke="var(--color-accent)" stroke-opacity="0.05" stroke-width="1" stroke-dasharray="2 12" transform="rotate(-8 178 138)"/>
+        <ellipse cx="178" cy="138" rx="100" ry="88"  stroke="var(--color-accent)" stroke-opacity="0.07" stroke-width="1" stroke-dasharray="3 9"  transform="rotate(5 178 138)"/>
+        <ellipse cx="178" cy="138" rx="68"  ry="60"  stroke="var(--color-accent)" stroke-opacity="0.11" stroke-width="1" stroke-dasharray="2 7"  transform="rotate(-12 178 138)"/>
+        <ellipse cx="178" cy="138" rx="38"  ry="34"  stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" stroke-dasharray="3 5"/>
+
+        <!-- outer→center -->
+        <path d="M52,42   Q110,80  178,138" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M268,58  Q240,95  178,138" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M295,172 Q248,158 178,138" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M220,268 Q205,210 178,138" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M62,252  Q105,205 178,138" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M18,148  Q85,130  178,138" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+
+        <!-- outer ring -->
+        <path d="M52,42   Q160,20  268,58"  stroke="var(--color-accent)" stroke-opacity="0.10" stroke-width="1" fill="none"/>
+        <path d="M268,58  Q295,115 295,172" stroke="var(--color-accent)" stroke-opacity="0.10" stroke-width="1" fill="none"/>
+        <path d="M295,172 Q265,228 220,268" stroke="var(--color-accent)" stroke-opacity="0.10" stroke-width="1" fill="none"/>
+        <path d="M220,268 Q140,278 62,252"  stroke="var(--color-accent)" stroke-opacity="0.10" stroke-width="1" fill="none"/>
+        <path d="M62,252  Q28,202  18,148"  stroke="var(--color-accent)" stroke-opacity="0.10" stroke-width="1" fill="none"/>
+        <path d="M18,148  Q22,88   52,42"   stroke="var(--color-accent)" stroke-opacity="0.10" stroke-width="1" fill="none"/>
+        <path d="M52,42   Q178,90  295,172" stroke="var(--color-accent)" stroke-opacity="0.05" stroke-width="1" fill="none"/>
+        <path d="M268,58  Q175,160 62,252"  stroke="var(--color-accent)" stroke-opacity="0.05" stroke-width="1" fill="none"/>
+        <path d="M18,148  Q120,220 220,268" stroke="var(--color-accent)" stroke-opacity="0.05" stroke-width="1" fill="none"/>
+
+        <!-- mid→center -->
+        <path d="M110,52  Q138,88  178,138" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1.5" fill="none"/>
+        <path d="M252,88  Q222,108 178,138" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1.5" fill="none"/>
+        <path d="M258,196 Q225,172 178,138" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1.5" fill="none"/>
+        <path d="M168,238 Q172,195 178,138" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1.5" fill="none"/>
+        <path d="M82,200  Q118,172 178,138" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1.5" fill="none"/>
+        <path d="M68,102  Q115,118 178,138" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1.5" fill="none"/>
+        <path d="M110,52  Q185,58  252,88"  stroke="var(--color-accent)" stroke-opacity="0.13" stroke-width="1" fill="none"/>
+        <path d="M252,88  Q268,145 258,196" stroke="var(--color-accent)" stroke-opacity="0.13" stroke-width="1" fill="none"/>
+        <path d="M258,196 Q218,228 168,238" stroke="var(--color-accent)" stroke-opacity="0.13" stroke-width="1" fill="none"/>
+        <path d="M168,238 Q118,228 82,200"  stroke="var(--color-accent)" stroke-opacity="0.13" stroke-width="1" fill="none"/>
+        <path d="M82,200  Q62,152  68,102"  stroke="var(--color-accent)" stroke-opacity="0.13" stroke-width="1" fill="none"/>
+        <path d="M68,102  Q85,62   110,52"  stroke="var(--color-accent)" stroke-opacity="0.13" stroke-width="1" fill="none"/>
+        <path d="M52,42   Q78,46   110,52"  stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M268,58  Q262,72  252,88"  stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M295,172 Q278,185 258,196" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M220,268 Q195,254 168,238" stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M62,252  Q70,226  82,200"  stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+        <path d="M18,148  Q40,122  68,102"  stroke="var(--color-accent)" stroke-opacity="0.18" stroke-width="1" fill="none"/>
+
+        <!-- inner→center -->
+        <path d="M158,82  Q165,108 178,138" stroke="var(--color-accent)" stroke-opacity="0.42" stroke-width="1.5" fill="none"/>
+        <path d="M218,110 Q202,122 178,138" stroke="var(--color-accent)" stroke-opacity="0.42" stroke-width="1.5" fill="none"/>
+        <path d="M222,174 Q205,162 178,138" stroke="var(--color-accent)" stroke-opacity="0.42" stroke-width="1.5" fill="none"/>
+        <path d="M172,200 Q174,172 178,138" stroke="var(--color-accent)" stroke-opacity="0.42" stroke-width="1.5" fill="none"/>
+        <path d="M128,178 Q150,162 178,138" stroke="var(--color-accent)" stroke-opacity="0.42" stroke-width="1.5" fill="none"/>
+        <path d="M122,112 Q148,122 178,138" stroke="var(--color-accent)" stroke-opacity="0.42" stroke-width="1.5" fill="none"/>
+        <path d="M158,82  Q192,88  218,110" stroke="var(--color-accent)" stroke-opacity="0.22" stroke-width="1" fill="none"/>
+        <path d="M218,110 Q225,145 222,174" stroke="var(--color-accent)" stroke-opacity="0.22" stroke-width="1" fill="none"/>
+        <path d="M222,174 Q200,194 172,200" stroke="var(--color-accent)" stroke-opacity="0.22" stroke-width="1" fill="none"/>
+        <path d="M172,200 Q145,195 128,178" stroke="var(--color-accent)" stroke-opacity="0.22" stroke-width="1" fill="none"/>
+        <path d="M128,178 Q118,148 122,112" stroke="var(--color-accent)" stroke-opacity="0.22" stroke-width="1" fill="none"/>
+        <path d="M122,112 Q136,88  158,82"  stroke="var(--color-accent)" stroke-opacity="0.22" stroke-width="1" fill="none"/>
+        <path d="M110,52  Q132,65  158,82"  stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M252,88  Q238,98  218,110" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M258,196 Q242,186 222,174" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M168,238 Q170,220 172,200" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M82,200  Q104,190 128,178" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M68,102  Q92,106  122,112" stroke="var(--color-accent)" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+
+        <!-- center glow -->
+        <circle cx="178" cy="138" r="55" fill="url(#cg)"/>
+
+        <!-- outer node halos -->
+        <circle cx="52"  cy="42"  r="60" fill="url(#cg-blue)"  fill-opacity="0.25"/>
+        <circle cx="268" cy="58"  r="55" fill="url(#cg-blue)"  fill-opacity="0.2"/>
+        <circle cx="295" cy="172" r="55" fill="url(#cg-cyan)"  fill-opacity="0.2"/>
+        <circle cx="220" cy="268" r="55" fill="url(#cg-amber)" fill-opacity="0.2"/>
+        <circle cx="62"  cy="252" r="55" fill="url(#cg-amber)" fill-opacity="0.2"/>
+        <circle cx="18"  cy="148" r="55" fill="url(#cg-cyan)"  fill-opacity="0.2"/>
+
+        <!-- outer nodes -->
+        <circle cx="52"  cy="42"  r="7.5" fill="#6366f1" fill-opacity="0.18" stroke="#6366f1" stroke-opacity="0.6" stroke-width="1.5" filter="url(#glow-blue)"/>
+        <circle cx="268" cy="58"  r="7.5" fill="#6366f1" fill-opacity="0.18" stroke="#6366f1" stroke-opacity="0.6" stroke-width="1.5" filter="url(#glow-blue)"/>
+        <circle cx="295" cy="172" r="7.5" fill="#06b6d4" fill-opacity="0.18" stroke="#06b6d4" stroke-opacity="0.6" stroke-width="1.5" filter="url(#glow-cyan)"/>
+        <circle cx="220" cy="268" r="7.5" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b" stroke-opacity="0.6" stroke-width="1.5" filter="url(#glow-amber)"/>
+        <circle cx="62"  cy="252" r="7.5" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b" stroke-opacity="0.6" stroke-width="1.5" filter="url(#glow-amber)"/>
+        <circle cx="18"  cy="148" r="7.5" fill="#06b6d4" fill-opacity="0.18" stroke="#06b6d4" stroke-opacity="0.6" stroke-width="1.5" filter="url(#glow-cyan)"/>
+        <!-- pulse rings -->
+        <circle cx="52"  cy="42"  r="7" fill="none" stroke="#6366f1" stroke-opacity="0.4" stroke-width="5"><animate attributeName="r" values="7;18;7" dur="4.2s" repeatCount="indefinite" begin="0s"/><animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4.2s" repeatCount="indefinite" begin="0s"/></circle>
+        <circle cx="268" cy="58"  r="7" fill="none" stroke="#6366f1" stroke-opacity="0.4" stroke-width="5"><animate attributeName="r" values="7;18;7" dur="4.2s" repeatCount="indefinite" begin="0.7s"/><animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4.2s" repeatCount="indefinite" begin="0.7s"/></circle>
+        <circle cx="295" cy="172" r="7" fill="none" stroke="#06b6d4" stroke-opacity="0.4" stroke-width="5"><animate attributeName="r" values="7;18;7" dur="4.2s" repeatCount="indefinite" begin="1.4s"/><animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4.2s" repeatCount="indefinite" begin="1.4s"/></circle>
+        <circle cx="220" cy="268" r="7" fill="none" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="5"><animate attributeName="r" values="7;18;7" dur="4.2s" repeatCount="indefinite" begin="2.1s"/><animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4.2s" repeatCount="indefinite" begin="2.1s"/></circle>
+        <circle cx="62"  cy="252" r="7" fill="none" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="5"><animate attributeName="r" values="7;18;7" dur="4.2s" repeatCount="indefinite" begin="2.8s"/><animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4.2s" repeatCount="indefinite" begin="2.8s"/></circle>
+        <circle cx="18"  cy="148" r="7" fill="none" stroke="#06b6d4" stroke-opacity="0.4" stroke-width="5"><animate attributeName="r" values="7;18;7" dur="4.2s" repeatCount="indefinite" begin="3.5s"/><animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4.2s" repeatCount="indefinite" begin="3.5s"/></circle>
+
+        <!-- mid nodes -->
+        <circle cx="110" cy="52"  r="5" fill="#8b5cf6" fill-opacity="0.9" filter="url(#glow-blue)"/>
+        <circle cx="252" cy="88"  r="5" fill="#06b6d4" fill-opacity="0.9" filter="url(#glow-cyan)"/>
+        <circle cx="258" cy="196" r="5" fill="#06b6d4" fill-opacity="0.9" filter="url(#glow-cyan)"/>
+        <circle cx="168" cy="238" r="5" fill="#f59e0b" fill-opacity="0.9" filter="url(#glow-amber)"/>
+        <circle cx="82"  cy="200" r="5" fill="#f59e0b" fill-opacity="0.9" filter="url(#glow-amber)"/>
+        <circle cx="68"  cy="102" r="5" fill="#8b5cf6" fill-opacity="0.9" filter="url(#glow-blue)"/>
+
+        <!-- inner nodes -->
+        <circle cx="158" cy="82"  r="4" fill="var(--color-accent)" fill-opacity="0.9" filter="url(#glow)"/>
+        <circle cx="218" cy="110" r="4" fill="var(--color-accent)" fill-opacity="0.9" filter="url(#glow)"/>
+        <circle cx="222" cy="174" r="4" fill="var(--color-accent)" fill-opacity="0.9" filter="url(#glow)"/>
+        <circle cx="172" cy="200" r="4" fill="var(--color-accent)" fill-opacity="0.9" filter="url(#glow)"/>
+        <circle cx="128" cy="178" r="4" fill="var(--color-accent)" fill-opacity="0.9" filter="url(#glow)"/>
+        <circle cx="122" cy="112" r="4" fill="var(--color-accent)" fill-opacity="0.9" filter="url(#glow)"/>
+
+        <!-- center core -->
+        <circle cx="178" cy="138" r="22" fill="var(--color-accent)" fill-opacity="0.07" stroke="var(--color-accent)" stroke-opacity="0.2" stroke-width="1"/>
+        <circle cx="178" cy="138" r="14" fill="var(--color-accent)" fill-opacity="0.18" stroke="var(--color-accent)" stroke-opacity="0.5" stroke-width="1.5"/>
+        <circle cx="178" cy="138" r="7"  fill="var(--color-accent)" filter="url(#glow2)"/>
+        <circle cx="178" cy="138" r="14" fill="none" stroke="var(--color-accent)" stroke-opacity="0.4" stroke-width="8">
+          <animate attributeName="r" values="14;28;14" dur="3.2s" repeatCount="indefinite"/>
+          <animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="3.2s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- pulse dots -->
+        <circle r="2.5" fill="#6366f1" fill-opacity="0.95" filter="url(#glow-blue)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#q1"/></animateMotion></circle>
+        <circle r="2.5" fill="#8b5cf6" fill-opacity="0.95" filter="url(#glow-blue)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.43s"><mpath href="#q2"/></animateMotion></circle>
+        <circle r="2.5" fill="#06b6d4" fill-opacity="0.95" filter="url(#glow-cyan)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.87s"><mpath href="#q3"/></animateMotion></circle>
+        <circle r="2.5" fill="#f59e0b" fill-opacity="0.95" filter="url(#glow-amber)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.3s"><mpath href="#q4"/></animateMotion></circle>
+        <circle r="2.5" fill="#f59e0b" fill-opacity="0.95" filter="url(#glow-amber)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.73s"><mpath href="#q5"/></animateMotion></circle>
+        <circle r="2.5" fill="#06b6d4" fill-opacity="0.95" filter="url(#glow-cyan)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="2.17s"><mpath href="#q6"/></animateMotion></circle>
+        <circle r="2" fill="#6366f1" fill-opacity="0.5"><animateMotion dur="3.8s" repeatCount="indefinite" begin="0.8s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#q1"/></animateMotion></circle>
+        <circle r="2" fill="#06b6d4" fill-opacity="0.5"><animateMotion dur="3.8s" repeatCount="indefinite" begin="2.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#q3"/></animateMotion></circle>
+        <circle r="2" fill="#f59e0b" fill-opacity="0.5"><animateMotion dur="3.8s" repeatCount="indefinite" begin="3.2s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#q5"/></animateMotion></circle>
+        <circle r="2" fill="#8b5cf6" fill-opacity="0.8" filter="url(#glow-blue)"><animateMotion dur="2.0s" repeatCount="indefinite" begin="0.2s"><mpath href="#qm1"/></animateMotion></circle>
+        <circle r="2" fill="#f59e0b" fill-opacity="0.8" filter="url(#glow-amber)"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0.9s"><mpath href="#qm2"/></animateMotion></circle>
+        <circle r="2" fill="#06b6d4" fill-opacity="0.8" filter="url(#glow-cyan)"><animateMotion dur="1.8s" repeatCount="indefinite" begin="1.5s"><mpath href="#qm3"/></animateMotion></circle>
+
+        <!-- hidden paths -->
+        <path id="q1" d="M52,42   Q110,80  178,138" style="display:none"/>
+        <path id="q2" d="M268,58  Q240,95  178,138" style="display:none"/>
+        <path id="q3" d="M295,172 Q248,158 178,138" style="display:none"/>
+        <path id="q4" d="M220,268 Q205,210 178,138" style="display:none"/>
+        <path id="q5" d="M62,252  Q105,205 178,138" style="display:none"/>
+        <path id="q6" d="M18,148  Q85,130  178,138" style="display:none"/>
+        <path id="qm1" d="M110,52  Q185,58  252,88"  style="display:none"/>
+        <path id="qm2" d="M258,196 Q218,228 168,238" style="display:none"/>
+        <path id="qm3" d="M82,200  Q62,152  68,102"  style="display:none"/>
+
+        <!-- labels -->
+        <text x="46"  y="30"  text-anchor="middle" font-size="7.5" fill="#6366f1" fill-opacity="0.7" font-family="monospace">大厂</text>
+        <text x="280" y="52"  text-anchor="start"  font-size="7.5" fill="#6366f1" fill-opacity="0.7" font-family="monospace">券商</text>
+        <text x="302" y="178" text-anchor="start"  font-size="7.5" fill="#06b6d4" fill-opacity="0.7" font-family="monospace">医疗</text>
+        <text x="224" y="284" text-anchor="middle" font-size="7.5" fill="#f59e0b" fill-opacity="0.7" font-family="monospace">独立</text>
+        <text x="52"  y="268" text-anchor="end"    font-size="7.5" fill="#f59e0b" fill-opacity="0.7" font-family="monospace">教培</text>
+        <text x="10"  y="144" text-anchor="end"    font-size="7.5" fill="#06b6d4" fill-opacity="0.7" font-family="monospace">云</text>
+        <text x="182" y="142" text-anchor="middle" font-size="6.5" fill="var(--color-accent)" fill-opacity="0.92" font-family="monospace" font-weight="bold">Agent</text>
+      </svg>
+    </div>
+
+    <!-- Text content, left-aligned, z-index above SVG -->
+    <div class="relative z-10 w-full lg:max-w-[58%] flex flex-col justify-center">
+      <!-- Tagline badge -->
+      <div class="mb-8 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-accent)]/50 bg-[var(--color-accent)]/10 px-4 py-1.5 text-xs font-bold tracking-[0.2em] uppercase text-[var(--color-accent)]">
+        <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-pulse"></span>
+        {t('site.tagline')}
+      </div>
+
+      <h1 class="font-sans leading-none tracking-tight">
+        {lang === 'zh' ? (
+          <>
+            <span class="block font-semibold text-[var(--color-text-secondary)] mb-3" style="font-size: clamp(1.6rem, 4vw, 2.8rem); letter-spacing: 0.05em;">
+              别学 AI 了，
+            </span>
+            <span class="block font-black" style="font-size: clamp(3.2rem, 9vw, 6rem); letter-spacing: -0.04em; line-height: 0.95; background: linear-gradient(95deg, #c45c3e 0%, #e8713a 40%, #ff5a1f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+              直接用起来
+            </span>
+          </>
+        ) : (
+          <>
+            <span class="block font-semibold text-[var(--color-text-secondary)] mb-3" style="font-size: clamp(1.3rem, 3vw, 2.2rem); letter-spacing: 0.05em;">
+              Stop Learning AI.
+            </span>
+            <span class="block font-black" style="font-size: clamp(2.8rem, 7vw, 5rem); letter-spacing: -0.04em; line-height: 0.95; background: linear-gradient(95deg, #c45c3e 0%, #e8713a 40%, #ff5a1f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+              Start Using It.
+            </span>
+          </>
+        )}
+      </h1>
+
+      <div class="mt-8 flex items-center gap-3">
+        <div class="h-0.5 w-10 bg-[var(--color-accent)] rounded-full"></div>
+        <div class="h-px w-6 bg-[var(--color-accent)]/50 rounded-full"></div>
+        <div class="h-px w-3 bg-[var(--color-accent)]/25 rounded-full"></div>
+      </div>
+
+      <p class="mt-6 text-lg sm:text-xl text-[var(--color-text-secondary)] leading-relaxed max-w-xl">
+        {t('home.hero.p1')}
+      </p>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href={localePath(lang, '/articles')}
+          class="inline-flex items-center gap-2 rounded-lg bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[var(--color-accent-dark)] hover:shadow-lg hover:shadow-[var(--color-accent)]/20"
+        >
+          {t('nav.articles')}
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+        <a
+          href="#join"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-surface-border)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        >
+          {t('home.join.title')}
+        </a>
+      </div>
+    </div>
+
   </section>
 
-  <!-- Divider -->
-  <div class="border-t border-[var(--color-surface-border)] mb-12"></div>
-
-  <!-- What's Here Section -->
-  <section class="mb-16">
-    <div class="grid gap-6 sm:grid-cols-2">
-      {sections.map(({ title, desc, href }) => (
-        <a href={href} class="group block rounded-lg border border-[var(--color-surface-border)] p-6 hover:border-[var(--color-accent)]/40 transition-colors">
-          <h3 class="font-serif text-lg font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-            {title}
-          </h3>
-          <p class="mt-2 text-sm text-[var(--color-text-secondary)] leading-relaxed">
-            {desc}
-          </p>
-        </a>
-      ))}
+  <!-- ═══ STATS STRIP ═══ -->
+  <section class="reveal border-y border-[var(--color-surface-border)] py-8 mb-20">
+    <div class="grid grid-cols-3 gap-4 text-center">
+      <div>
+        <p class="font-serif text-3xl font-semibold text-[var(--color-text-primary)]">{articleCount}</p>
+        <p class="mt-1 text-sm text-[var(--color-text-muted)]">{t('nav.articles')}</p>
+      </div>
+      <div>
+        <p class="font-serif text-3xl font-semibold text-[var(--color-text-primary)]">{eventCount}</p>
+        <p class="mt-1 text-sm text-[var(--color-text-muted)]">{t('nav.events')}</p>
+      </div>
+      <div>
+        <p class="font-serif text-3xl font-semibold text-[var(--color-text-primary)]">{authorCount}</p>
+        <p class="mt-1 text-sm text-[var(--color-text-muted)]">{t('nav.authors')}</p>
+      </div>
     </div>
   </section>
 
-  <!-- Divider -->
-  <div class="border-t border-[var(--color-surface-border)] mb-12"></div>
+  <!-- ═══ LATEST EVENT ═══ -->
+  {latestEvent && (
+    <section class="reveal mb-20">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
+          {t('nav.events')}
+        </h2>
+        <a href={localePath(lang, '/events')} class="group inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors">
+          {t('home.view.all')}
+          <span class="transition-transform group-hover:translate-x-0.5">→</span>
+        </a>
+      </div>
+      <a
+        href={localePath(lang, `/events/${latestEvent.id}`)}
+        class="group relative flex flex-col sm:flex-row gap-0 rounded-2xl border border-[var(--color-surface-border)] overflow-hidden hover:border-[var(--color-accent)]/50 transition-all hover:shadow-lg"
+      >
+        {/* Content — left, primary */}
+        <div class="flex-1 min-w-0 p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-5">
+              <span class="inline-block rounded-full bg-gradient-to-r from-[var(--color-accent)] to-orange-400 px-3 py-1 text-xs font-semibold text-white">
+                {t('event.episode', { n: latestEvent.data.number })}
+              </span>
+              <span class="text-xs text-[var(--color-text-muted)]">
+                {new Date(latestEvent.data.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
+              <span class="text-xs font-semibold text-[var(--color-accent)] border border-[var(--color-accent)]/30 rounded-full px-2 py-0.5">最新</span>
+            </div>
+            <h3 class="font-serif text-2xl sm:text-3xl font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">
+              {latestEvent.data.title}
+            </h3>
+            <p class="mt-4 text-base text-[var(--color-text-secondary)] leading-relaxed">
+              {latestEvent.data.description}
+            </p>
+          </div>
+          <div class="mt-8 space-y-4">
+            {latestEvent.data.speakers && latestEvent.data.speakers.length > 0 && (
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-[var(--color-text-muted)] shrink-0">分享嘉宾</span>
+                <div class="flex flex-wrap gap-2">
+                  {latestEvent.data.speakers.map((speaker) => (
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-alt)] px-3 py-1 text-sm font-medium text-[var(--color-text-primary)]">
+                      <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
+                      {speaker}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {latestEvent.data.tags && latestEvent.data.tags.length > 0 && (
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-[var(--color-text-muted)] shrink-0">话题标签</span>
+                <div class="flex flex-wrap gap-1.5">
+                  {latestEvent.data.tags.slice(0, 4).map((tag) => (
+                    <span class="text-xs text-[var(--color-text-muted)] bg-[var(--color-surface-alt)] border border-[var(--color-surface-border)] rounded-md px-2 py-0.5">#{tag}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div class="pt-2 flex items-center gap-2 text-sm font-medium text-[var(--color-accent)]">
+              查看详情
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        {/* Poster — right, fixed width, full height */}
+        {latestEventWithPoster?.data.poster && (
+          <div class="shrink-0 sm:w-48 md:w-56 overflow-hidden bg-[var(--color-surface-alt)]">
+            <img
+              src={latestEventWithPoster.data.poster}
+              alt={latestEventWithPoster.data.title}
+              width="224"
+              height="400"
+              loading="lazy"
+              decoding="async"
+              class="h-48 sm:h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+        )}
+      </a>
+    </section>
+  )}
 
-  <!-- Latest Articles -->
-  <section class="mb-16">
-    <div class="flex items-baseline justify-between mb-8">
+  <!-- ═══ LATEST ARTICLES ═══ -->
+  <section class="reveal mb-20">
+    <div class="flex items-baseline justify-between mb-6">
       <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
         {t('home.latest')}
       </h2>
-      <a href={localePath(lang, '/articles')} class="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors">
+      <a href={localePath(lang, '/articles')} class="group inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors">
         {t('home.view.all')}
+        <span class="transition-transform group-hover:translate-x-0.5">→</span>
       </a>
     </div>
     <div class="space-y-0">
@@ -88,48 +425,139 @@ const sections = [
     </div>
   </section>
 
-  <!-- Divider -->
-  <div class="border-t border-[var(--color-surface-border)] mb-12"></div>
+  <!-- ═══ FEATURED AUTHORS ═══ -->
+  {featuredAuthors.length > 0 && (
+    <section class="reveal mb-20">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
+          {t('nav.authors')}
+        </h2>
+        <a href={localePath(lang, '/authors')} class="group inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors">
+          {t('home.view.all')}
+          <span class="transition-transform group-hover:translate-x-0.5">→</span>
+        </a>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        {featuredAuthors.map((author) => (
+          <a
+            href={localePath(lang, `/authors/${author.id}`)}
+            class="group flex items-center gap-3 rounded-lg border border-[var(--color-surface-border)] px-4 py-3 hover:border-[var(--color-accent)]/40 transition-all hover:shadow-sm"
+          >
+            {author.data.avatar ? (
+              <img
+                src={author.data.avatar}
+                alt={author.data.name}
+                width="40"
+                height="40"
+                loading="lazy"
+                decoding="async"
+                class="h-10 w-10 rounded-full object-cover shrink-0"
+              />
+            ) : (
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-primary-400)] to-purple-500 text-white font-semibold text-sm">
+                {author.data.name.charAt(0)}
+              </div>
+            )}
+            <div class="min-w-0">
+              <p class="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors truncate">
+                {author.data.name}
+              </p>
+              <p class="text-xs text-[var(--color-text-muted)] truncate max-w-[140px]">
+                {author.data.bio}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
 
-  <!-- Testimonial -->
-  <section class="mb-16">
-    <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)] mb-8">
-      {t('home.testimonial.title')}
-    </h2>
-    <blockquote class="border-l-3 border-[var(--color-accent)] pl-6">
-      <p class="text-[var(--color-text-secondary)] leading-relaxed">
-        {t('home.testimonial.chenhao.q1')}
+  <!-- ═══ TESTIMONIAL ═══ -->
+  <section class="reveal mb-20">
+    <blockquote class="relative border-l-2 border-[var(--color-accent)] pl-8 py-2">
+      <p class="font-serif text-lg text-[var(--color-text-secondary)] leading-relaxed italic">
+        "{t('home.testimonial.chenhao.q2')}"
       </p>
-      <p class="mt-4 text-[var(--color-text-secondary)] leading-relaxed">
-        {t('home.testimonial.chenhao.q2')}
-      </p>
-      <footer class="mt-4 text-sm text-[var(--color-text-muted)]">
-        — {t('home.testimonial.chenhao.name')}
+      <footer class="mt-4 flex items-center gap-3">
+        <span class="h-px w-6 bg-[var(--color-surface-border)]"></span>
+        <span class="text-sm font-medium text-[var(--color-text-muted)]">{t('home.testimonial.chenhao.name')}</span>
       </footer>
     </blockquote>
   </section>
 
-  <!-- Divider -->
-  <div class="border-t border-[var(--color-surface-border)] mb-12"></div>
+  <!-- ═══ EXPLORE SECTIONS ═══ -->
+  <section class="reveal mb-20">
+    <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)] mb-6">
+      探索社区
+    </h2>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {[
+        { title: t('home.section.articles'), desc: t('home.section.articles.desc'), href: localePath(lang, '/articles'), icon: '✦' },
+        { title: t('home.section.discussions'), desc: t('home.section.discussions.desc'), href: localePath(lang, '/discussions'), icon: '◈' },
+        { title: t('home.section.events'), desc: t('home.section.events.desc'), href: localePath(lang, '/events'), icon: '◎' },
+        { title: t('home.section.authors'), desc: t('home.section.authors.desc'), href: localePath(lang, '/authors'), icon: '◇' },
+      ].map(({ title, desc, href, icon }) => (
+        <a href={href} class="group flex gap-4 rounded-lg border border-[var(--color-surface-border)] p-5 hover:border-[var(--color-accent)]/40 transition-all hover:shadow-sm">
+          <span class="text-xl text-[var(--color-accent)] shrink-0 mt-0.5">{icon}</span>
+          <div>
+            <h3 class="font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+              {title}
+            </h3>
+            <p class="mt-1 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+              {desc}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
 
-  <!-- Join Community -->
-  <section class="mb-8">
-    <div class="flex flex-col items-center sm:flex-row sm:items-start gap-8">
-      <div class="flex-1">
-        <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
-          {t('home.join.title')}
-        </h2>
-        <p class="mt-3 text-[var(--color-text-secondary)] leading-relaxed">
-          {t('home.join.desc')}
-        </p>
-      </div>
-      <div class="shrink-0">
-        <img
-          src="/images/articles/dont-learn-ai-use-it/permanent_chatroom_qr.jpg"
-          alt="WeChat QR Code"
-          class="w-48 h-48 rounded-lg border border-[var(--color-surface-border)]"
-        />
+  <!-- ═══ JOIN COMMUNITY ═══ -->
+  <section id="join" class="reveal mb-8">
+    <div class="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-alt)] p-8">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8">
+        <div class="flex-1">
+          <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
+            {t('home.join.title')}
+          </h2>
+          <p class="mt-3 text-[var(--color-text-secondary)] leading-relaxed">
+            {t('home.join.desc')}
+          </p>
+        </div>
+        <div class="shrink-0">
+          <img
+            src="/images/articles/dont-learn-ai-use-it/permanent_chatroom_qr.jpg"
+            alt="WeChat QR Code"
+            width="192"
+            height="192"
+            loading="lazy"
+            decoding="async"
+            class="w-40 h-40 rounded-xl border border-[var(--color-surface-border)]"
+          />
+        </div>
       </div>
     </div>
   </section>
+
 </BaseLayout>
+
+<script is:inline>
+  // Mark JS as available so .reveal animation can safely hide content
+  document.documentElement.classList.add('js');
+</script>
+<script>
+  // Scroll reveal: each .reveal animates in when entering the viewport
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08 }
+  );
+
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+</script>

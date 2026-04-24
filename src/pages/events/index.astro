@@ -11,13 +11,13 @@ const events = allEvents.sort(
 ---
 
 <BaseLayout
-  title="活动 | Agents 特区"
-  description="Agents 特区社区研讨会和活动记录。"
+  title="社区分享 | Agent 特区"
+  description="Agent 特区每周六晚线上分享会记录。"
 >
   <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-    活动
+    社区分享
   </h1>
-  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">社区研讨会和活动</p>
+  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">每周六晚线上分享会记录</p>
   <div class="grid gap-6 sm:grid-cols-2">
     {events.map((event) => (
       <EventCard event={event} />

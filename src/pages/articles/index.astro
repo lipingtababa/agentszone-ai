@@ -2,6 +2,9 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('zh');
 
 const allArticles = await getCollection('articles', ({ data }) => {
   return import.meta.env.PROD ? !data.draft : true;
@@ -13,22 +16,105 @@ const articles = allArticles.sort(
 
 const authors = await getCollection('authors');
 const authorMap = new Map(authors.map((a) => [a.id, a.data.name]));
+
+// Collect all unique tags with counts
+const tagCounts = new Map<string, number>();
+for (const article of articles) {
+  for (const tag of article.data.tags ?? []) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const topTags = [...tagCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10)
+  .map(([tag]) => tag);
 ---
 
 <BaseLayout
-  title="全部文章 | Agents 特区"
-  description="浏览所有关于AI agent管理、编排和治理的文章。"
+  title={`${t('articles.title')} | Agent 特区`}
+  description={t('articles.desc')}
 >
-  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-    全部文章
-  </h1>
-  <p class="mt-2 mb-10 text-[var(--color-text-muted)]">浏览所有关于AI agent管理的文章</p>
-  <div class="grid gap-4 sm:grid-cols-2">
+  <!-- Page header -->
+  <div class="mb-10 border-b border-[var(--color-surface-border)] pb-8">
+    <h1 class="font-serif text-4xl font-semibold tracking-tight text-[var(--color-text-primary)]">
+      {t('articles.title')}
+    </h1>
+    <p class="mt-3 text-[var(--color-text-secondary)]">
+      {articles.length} 篇文章，持续更新
+    </p>
+  </div>
+
+  <!-- Tag filter bar -->
+  {topTags.length > 0 && (
+    <div class="mb-8 flex flex-wrap gap-2" id="tag-filters">
+      <button
+        class="tag-btn active rounded-full border border-[var(--color-surface-border)] px-3 py-1 text-sm transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        data-tag="all"
+      >
+        全部
+      </button>
+      {topTags.map((tag) => (
+        <button
+          class="tag-btn rounded-full border border-[var(--color-surface-border)] px-3 py-1 text-sm text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          data-tag={tag}
+        >
+          #{tag}
+          <span class="ml-1 text-xs opacity-60">{tagCounts.get(tag)}</span>
+        </button>
+      ))}
+    </div>
+  )}
+
+  <!-- Article list -->
+  <div id="article-list">
     {articles.map((article) => (
-      <ArticleCard
-        article={article}
-        authorName={authorMap.get(article.data.author.id) ?? 'Unknown'}
-      />
+      <div class="article-item" data-tags={(article.data.tags ?? []).join(' ')}>
+        <ArticleCard
+          article={article}
+          authorName={authorMap.get(article.data.author.id) ?? 'Unknown'}
+        />
+      </div>
     ))}
   </div>
+
+  <!-- Empty state (shown by JS when filter yields no results) -->
+  <p id="no-results" class="hidden py-16 text-center text-sm text-[var(--color-text-muted)]">
+    该话题下暂无文章
+  </p>
 </BaseLayout>
+
+<script>
+  const tagBtns = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+  const items = document.querySelectorAll<HTMLElement>('.article-item');
+  const noResults = document.getElementById('no-results');
+
+  function filterByTag(selected: string) {
+    let visible = 0;
+    items.forEach((item) => {
+      const tags = item.dataset.tags ?? '';
+      const show = selected === 'all' || tags.split(' ').includes(selected);
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (noResults) noResults.classList.toggle('hidden', visible > 0);
+  }
+
+  tagBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tagBtns.forEach((b) => b.classList.remove(
+        'active', 'border-[var(--color-accent)]', 'text-[var(--color-accent)]'
+      ));
+      btn.classList.add(
+        'active', 'border-[var(--color-accent)]', 'text-[var(--color-accent)]'
+      );
+      filterByTag(btn.dataset.tag ?? 'all');
+    });
+  });
+</script>
+
+<style>
+  .tag-btn.active {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+</style>

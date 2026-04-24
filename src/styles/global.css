@@ -29,7 +29,7 @@
 
   /* 字体 */
   --font-serif: 'Noto Serif SC', 'Source Han Serif CN', 'Songti SC', serif;
-  --font-sans: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
@@ -55,6 +55,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-surface);
   color: var(--color-text-primary);
+  /* Tighter, more refined letter-spacing for Plus Jakarta Sans */
+  letter-spacing: -0.01em;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+/* Chinese characters: reset letter-spacing (ideographs don't benefit from it) */
+:lang(zh) body,
+body:lang(zh) {
+  letter-spacing: 0;
 }
 
 /* 选中文字样式 */
@@ -99,8 +108,10 @@ body {
 .prose {
   max-width: 75ch;
   font-size: 1.0625rem;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--color-text-primary);
+  /* Slightly looser for Chinese body text readability */
+  word-spacing: 0.05em;
 }
 
 .prose h1,
@@ -109,8 +120,10 @@ body {
 .prose h4 {
   font-family: var(--font-serif);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  /* Serif Chinese headings look better with tighter tracking */
+  letter-spacing: -0.01em;
   color: var(--color-text-primary);
+  line-height: 1.4;
 }
 
 .prose h1 {
@@ -241,4 +254,107 @@ body {
 .prose strong {
   font-weight: 600;
   color: var(--color-text-primary);
+}
+
+/* ─── Scroll reveal ─── */
+/* Only hide elements when JS has confirmed it's running (avoids black page on load) */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.js .reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect user's reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─── Hero title gradient ─── */
+.hero-title-gradient {
+  background: linear-gradient(
+    160deg,
+    #c45c3e 0%,
+    #b84830 35%,
+    #7a2e18 65%,
+    #1a1a1a 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .hero-title-gradient {
+  background: linear-gradient(
+    160deg,
+    #ff9a7a 0%,
+    #e06040 35%,
+    #c04a28 65%,
+    #e8e8e8 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Radial gradient utility for hero background */
+.bg-gradient-radial {
+  background-image: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+}
+
+/* Hero dot-grid background texture */
+.hero-bg-grid {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(196, 92, 62, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(196, 92, 62, 0.06) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(196, 92, 62, 0.03) 25%, transparent 25%, transparent 75%, rgba(196, 92, 62, 0.03) 75%),
+    radial-gradient(circle at 1px 1px, var(--color-surface-border) 1px, transparent 0);
+  background-size: 100% 100%, 100% 100%, 40px 40px, 28px 28px;
+}
+
+.dark .hero-bg-grid {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(196, 92, 62, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(196, 92, 62, 0.08) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(255,255,255,0.015) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.015) 75%),
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0);
+  background-size: 100% 100%, 100% 100%, 40px 40px, 28px 28px;
+}
+
+/* ─── Utility classes used across components ─── */
+
+/* Subtle glow on hover for card elements */
+.glow-hover {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.glow-hover:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+.dark .glow-hover:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Gradient text on hover for titles */
+.hover-text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary) 0%,
+    var(--color-accent) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  transition: background-position 0.4s ease;
+}
+.group:hover .hover-text-gradient {
+  background-position: right center;
 }
