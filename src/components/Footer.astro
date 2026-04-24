@@ -4,18 +4,18 @@ import { getLang, useTranslations, localePath } from '../i18n/utils';
 const lang = getLang(Astro.currentLocale);
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
-const siteName = lang === 'en' ? 'AgentsZone' : 'Agents 特区';
+const siteName = t('site.name');
 ---
 
 <footer class="border-t border-[var(--color-surface-border)] bg-[var(--color-surface)]">
-  <div class="mx-auto max-w-4xl px-6 py-12">
+  <div class="mx-auto max-w-6xl px-8 py-12">
     <div class="flex flex-col gap-8 sm:flex-row sm:justify-between">
       <div class="max-w-xs">
         <a href="/" class="font-serif text-lg font-semibold text-[var(--color-text-primary)]">
-          Agents{lang !== 'en' && ' '}<span class="text-gradient">{lang === 'en' ? 'Zone' : '特区'}</span>
+          Agent{lang !== 'en' && ' '}<span class="text-gradient">{lang === 'en' ? 'Zone' : '特区'}</span>
         </a>
         <p class="mt-2 text-sm text-[var(--color-text-muted)] leading-relaxed">
-          {t('footer.desc')}
+          {t('site.description')}
         </p>
       </div>
       <div class="flex gap-8 text-sm">

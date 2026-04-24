@@ -9,12 +9,12 @@ import '../../../styles/global.css';
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="Poster Generator - AgentsZone" description="Generate posters for Agents Zone Forum events" />
+    <BaseHead title="Poster Generator - AgentsZone" description="Generate posters for AgentsZone community sessions" />
   </head>
   <body class="min-h-screen bg-[var(--color-surface)] text-[var(--color-text-primary)]">
     <Header />
     <main class="mx-auto w-full max-w-7xl px-6 py-12">
-      <PosterGenerator client:load />
+      <PosterGenerator client:idle />
     </main>
     <Footer />
   </body>

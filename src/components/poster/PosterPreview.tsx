@@ -45,7 +45,7 @@ const POSTER_H = 1920;
 
 export const PosterPreview: React.FC<Props> = ({ data, scale = 0.4 }) => {
   const {
-    forumTitle = "Agents特区论坛",
+    forumTitle = "Agent特区论坛",
     episodeNumber,
     title,
     description,
@@ -669,7 +669,7 @@ const PersonCard: React.FC<{
 
 const MinimalPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
   const {
-    forumTitle = "Agents特区论坛",
+    forumTitle = "Agent特区论坛",
     episodeNumber,
     title,
     description,
@@ -1192,7 +1192,7 @@ const MinimalPersonCard: React.FC<{
 
 const GlassPoster: React.FC<Props> = ({ data, scale = 0.4 }) => {
   const {
-    forumTitle = "Agents特区论坛",
+    forumTitle = "Agent特区论坛",
     episodeNumber,
     title,
     description,

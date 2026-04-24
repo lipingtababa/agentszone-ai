@@ -31,7 +31,7 @@ const { Content } = await render(author);
 ---
 
 <BaseLayout
-  title={`${name} | Agents 特区`}
+  title={`${name} | Agent 特区`}
   description={bio}
 >
   <div class="mb-10">
@@ -40,6 +40,10 @@ const { Content } = await render(author);
         <img
           src={avatar}
           alt={name}
+          width="96"
+          height="96"
+          loading="lazy"
+          decoding="async"
           class="h-24 w-24 rounded-full object-cover ring-2 ring-[var(--color-surface-border)] shrink-0"
         />
       )}

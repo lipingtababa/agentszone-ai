@@ -20,6 +20,10 @@ const href = localePath(lang, `/authors/${author.id}`);
     <img
       src={avatar}
       alt={name}
+      width="48"
+      height="48"
+      loading="lazy"
+      decoding="async"
       class="h-12 w-12 rounded-full object-cover ring-2 ring-[var(--color-surface-border)] group-hover:ring-[var(--color-primary-400)] group-hover:shadow-md group-hover:shadow-[var(--color-primary-500)]/20 transition-all"
     />
   ) : (

@@ -9,12 +9,12 @@ import '../../styles/global.css';
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title="海报生成器 - Agents 特区" description="为 Agents特区论坛 活动生成海报" />
+    <BaseHead title="海报生成器 - Agent 特区" description="为 Agent特区社区分享会生成海报" />
   </head>
   <body class="min-h-screen bg-[var(--color-surface)] text-[var(--color-text-primary)]">
     <Header />
     <main class="mx-auto w-full max-w-7xl px-6 py-12">
-      <PosterGenerator client:load />
+      <PosterGenerator client:idle />
     </main>
     <Footer />
   </body>

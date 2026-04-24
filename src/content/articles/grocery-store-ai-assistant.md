@@ -1,6 +1,6 @@
 ---
 title: 工资只要300块一个月的生鲜店长助理
-description: Agents特区论坛第20期复盘：米总用AI给香港生鲜门店做了一套语音驱动的管理系统，月成本不到300块，解决了困扰行业几十年的库存管理问题。
+description: Agent特区论坛第20期复盘：米总用AI给香港生鲜门店做了一套语音驱动的管理系统，月成本不到300块，解决了困扰行业几十年的库存管理问题。
 author: cuifuze
 date: 2026-04-05
 tags: [ai-application, enterprise, retail]
@@ -9,9 +9,9 @@ original_url: https://mp.weixin.qq.com/s/4XvPKsgZq7xJ9tcywQvovQ
 
 转载自崔老板的"AI给生鲜店长当助理，一个月成本不到300块，凭什么？"
 
-— Agents特区论坛第20期精华复盘
+— Agent特区论坛第20期精华复盘
 
-Agents特区论坛第20期，米总（David）做了一场分享。他用简单的技术解决了一个困扰了整个生鲜行业几十年的老问题。
+Agent特区论坛第20期，米总（David）做了一场分享。他用简单的技术解决了一个困扰了整个生鲜行业几十年的老问题。
 
 今天我把这场分享的精华整理出来，希望能给正在琢磨"AI到底能干嘛"的朋友一些启发。
 

@@ -4,7 +4,7 @@ import { PosterPreview, type PosterData, type Person, type PosterStyle } from ".
 import { toPng } from "html-to-image";
 
 const defaultData: PosterData = {
-  forumTitle: "Agents特区论坛",
+  forumTitle: "Agent特区论坛",
   episodeNumber: 18,
   title: "AI客服为什么讨人嫌？",
   description:
