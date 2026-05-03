@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import { getLang, useTranslations, localePath } from '../i18n/utils';
+import TestimonialRotator from '../components/TestimonialRotator';
 
 const lang = getLang(Astro.currentLocale);
 const t = useTranslations(lang);
@@ -507,15 +508,10 @@ const sections = [
 
   <!-- ═══ TESTIMONIAL ═══ -->
   <section class="reveal mb-20">
-    <blockquote class="relative border-l-2 border-[var(--color-accent)] pl-8 py-2">
-      <p class="font-serif text-lg text-[var(--color-text-secondary)] leading-relaxed italic">
-        "{t('home.testimonial.chenhao.q2')}"
-      </p>
-      <footer class="mt-4 flex items-center gap-3">
-        <span class="h-px w-6 bg-[var(--color-surface-border)]"></span>
-        <span class="text-sm font-medium text-[var(--color-text-muted)]">{t('home.testimonial.chenhao.name')}</span>
-      </footer>
-    </blockquote>
+    <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)] mb-8">
+      {t('home.testimonial.title')}
+    </h2>
+    <TestimonialRotator client:load />
   </section>
 
   <!-- ═══ EXPLORE SECTIONS ═══ -->
