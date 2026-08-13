@@ -1,0 +1,60 @@
+---
+interface Props {
+  lang: 'zh' | 'en';
+}
+
+const { lang } = Astro.props;
+const isChinese = lang === 'zh';
+const content = isChinese
+  ? {
+      label: '合作活动',
+      campaign: 'GOAI 1000 Voices',
+      title: '世界人工智能开源大赛',
+      description: '为开放、共享、共建的 AI 未来发声。',
+      action: '报名参赛',
+    }
+  : {
+      label: 'Partner Event',
+      campaign: 'GOAI 1000 Voices',
+      title: 'Global Open-source AI Challenge',
+      description: 'Speak up for an open, shared, and co-built AI future.',
+      action: 'Enter the Challenge',
+    };
+---
+
+<section class="reveal mb-16" aria-label={content.campaign}>
+  <a
+    href="https://www.goaihz.com/?channel=mg"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="group grid overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-elevated)] transition-all hover:-translate-y-0.5 hover:border-[#1287c7]/60 hover:shadow-xl md:grid-cols-2"
+  >
+    <div class="relative h-64 overflow-hidden sm:h-72 md:col-start-2 md:row-start-1 md:h-full md:min-h-80">
+      <img
+        src="/images/campaigns/goai-1000-voices.png"
+        alt="GOAI 1000 Voices 世界人工智能开源大赛海报"
+        class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        loading="lazy"
+      />
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#031d68]/30 to-transparent md:bg-gradient-to-r md:from-[var(--color-surface-elevated)]/20 md:to-transparent"></div>
+    </div>
+
+    <div class="flex flex-col justify-center p-7 sm:p-10 md:col-start-1 md:row-start-1">
+      <div class="mb-5 flex items-center gap-3">
+        <span class="h-2 w-2 rounded-full bg-[#19c6c9]"></span>
+        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0878bd]">{content.label}</span>
+      </div>
+      <p class="font-mono text-sm font-medium text-[#0878bd]">{content.campaign}</p>
+      <h2 class="mt-3 font-serif text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl">
+        {content.title}
+      </h2>
+      <p class="mt-4 max-w-lg leading-relaxed text-[var(--color-text-secondary)]">
+        {content.description}
+      </p>
+      <span class="mt-7 inline-flex w-fit items-center gap-2 rounded-lg bg-[#0878bd] px-5 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-[#05649f]">
+        {content.action}
+        <span aria-hidden="true">↗</span>
+      </span>
+    </div>
+  </a>
+</section>

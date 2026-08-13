@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import GoaiBanner from '../components/GoaiBanner.astro';
 import { getLang, useTranslations, localePath } from '../i18n/utils';
 
 const lang = getLang(Astro.currentLocale);
@@ -307,6 +308,8 @@ const sections = [
     </div>
 
   </section>
+
+  <GoaiBanner lang={lang} />
 
   <!-- ═══ STATS STRIP ═══ -->
   <section class="reveal border-y border-[var(--color-surface-border)] py-8 mb-20">
