@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <rect width="1080" height="1440" fill="#f1eee7"/>
+  <rect x="58" y="58" width="964" height="1324" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="920" cy="118" r="10" fill="#ef4e2f"/>
+  <text x="82" y="128" fill="#ef4e2f" font-family="Arial,'Noto Sans SC',sans-serif" font-size="30" font-weight="700" letter-spacing="4">AGENTS 特区 · 主题访谈</text>
+  <text x="82" y="310" fill="#ef4e2f" font-family="Arial,'Noto Sans SC',sans-serif" font-size="36" font-weight="700">一位新任 CAIO 的上任现场</text>
+  <text x="78" y="505" fill="#111" font-family="Georgia,'Noto Serif SC',serif" font-size="138" font-weight="700">首席 AI 官，</text>
+  <text x="78" y="665" fill="#111" font-family="Georgia,'Noto Serif SC',serif" font-size="126" font-weight="700">这是个什么</text>
+  <text x="78" y="825" fill="#111" font-family="Georgia,'Noto Serif SC',serif" font-size="126" font-weight="700">新岗位？</text>
+  <path d="M82 910h916" stroke="#aaa49a" stroke-width="2"/>
+  <text x="82" y="990" fill="#4f4b45" font-family="Arial,'Noto Sans SC',sans-serif" font-size="34">职责边界 · 能力模型 · 团队形态</text>
+  <text x="82" y="1045" fill="#4f4b45" font-family="Arial,'Noto Sans SC',sans-serif" font-size="34">CTO 协作 · AI 转型预算</text>
+  <text x="82" y="1190" fill="#ef4e2f" font-family="Arial,'Noto Sans SC',sans-serif" font-size="27" letter-spacing="4">受访嘉宾</text>
+  <text x="82" y="1275" fill="#111" font-family="Georgia,'Noto Serif SC',serif" font-size="58" font-weight="700">新任 CAIO · 匿名</text>
+  <text x="998" y="1328" text-anchor="end" fill="#6d6860" font-family="Arial,sans-serif" font-size="26">2026.09.08</text>
+</svg>
