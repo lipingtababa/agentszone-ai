@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <rect width="1080" height="1440" fill="#f3efe7"/>
+  <g fill="none" stroke="#d7cfc0" stroke-width="2"><path d="M0 250h1080M0 1190h1080"/><path d="M120 870C260 580 410 1020 570 690s280-150 390-420"/><circle cx="120" cy="870" r="13" fill="#c45c3e"/><circle cx="570" cy="690" r="13" fill="#c45c3e"/><circle cx="960" cy="270" r="13" fill="#c45c3e"/></g>
+  <text x="72" y="105" fill="#c45c3e" font-family="Arial,'Noto Sans SC',sans-serif" font-size="30" font-weight="700" letter-spacing="5">AGENTS 特区 · 第 12 期</text>
+  <text x="72" y="430" fill="#171717" font-family="Georgia,'Noto Serif SC',serif" font-size="190" font-weight="700">创世纪！</text>
+  <text x="78" y="535" fill="#4d4a45" font-family="Arial,'Noto Sans SC',sans-serif" font-size="38">自主智能体系统从理论走向实践</text>
+  <text x="72" y="1040" fill="#69645d" font-family="Arial,'Noto Sans SC',sans-serif" font-size="34">多 Agent 协作 · 任务调度 · 持久化管理</text>
+  <text x="72" y="1260" fill="#c45c3e" font-family="Arial,'Noto Sans SC',sans-serif" font-size="28" letter-spacing="4">分享人</text>
+  <text x="72" y="1330" fill="#171717" font-family="Georgia,'Noto Serif SC',serif" font-size="58" font-weight="700">杜天微</text>
+  <text x="1000" y="1330" text-anchor="end" fill="#69645d" font-family="Arial,sans-serif" font-size="26">2026.02.01</text>
+</svg>

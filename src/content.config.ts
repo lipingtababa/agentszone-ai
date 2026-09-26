@@ -62,7 +62,7 @@ const authorsEn = defineCollection({
 const events = defineCollection({
   loader: glob({ pattern: '[^_]*.md', base: 'src/content/events' }),
   schema: z.object({
-    number: z.number(),
+    number: z.number().optional(),
     title: z.string().max(120),
     description: z.string().max(500),
     date: z.coerce.date(),
