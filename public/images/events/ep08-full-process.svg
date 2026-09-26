@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <rect width="1080" height="1440" fill="#121212"/>
+  <path d="M0 0h1080v18H0z" fill="#c45c3e"/>
+  <g fill="none" stroke="#343434" stroke-width="2"><path d="M90 310h900M90 1050h900"/><circle cx="860" cy="690" r="230"/><circle cx="860" cy="690" r="150"/><path d="M90 690h540M630 690l-50-34m50 34-50 34"/></g>
+  <text x="90" y="105" fill="#d97b5f" font-family="Arial,'Noto Sans SC',sans-serif" font-size="30" font-weight="700" letter-spacing="5">AGENTS 特区 · 第 08 期</text>
+  <text x="90" y="430" fill="#fafaf8" font-family="Georgia,'Noto Serif SC',serif" font-size="112" font-weight="700">崔老板</text>
+  <text x="90" y="570" fill="#fafaf8" font-family="Georgia,'Noto Serif SC',serif" font-size="112" font-weight="700">打通全流程</text>
+  <text x="90" y="780" fill="#b9b9b3" font-family="Arial,'Noto Sans SC',sans-serif" font-size="38">从需求到交付，AI 如何进入</text>
+  <text x="90" y="835" fill="#b9b9b3" font-family="Arial,'Noto Sans SC',sans-serif" font-size="38">企业级项目管理的完整链路</text>
+  <text x="90" y="1160" fill="#d97b5f" font-family="Arial,'Noto Sans SC',sans-serif" font-size="28" letter-spacing="4">分享人</text>
+  <text x="90" y="1235" fill="#fafaf8" font-family="Georgia,'Noto Serif SC',serif" font-size="58" font-weight="700">崔老板</text>
+  <text x="990" y="1340" text-anchor="end" fill="#777" font-family="Arial,sans-serif" font-size="26">2026.01.20</text>
+</svg>

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import EventCard from '../components/EventCard.astro';
 import GoaiBanner from '../components/GoaiBanner.astro';
 import { getLang, useTranslations, localePath } from '../i18n/utils';
 
@@ -27,10 +28,7 @@ const allEvents = await getCollection('events');
 const sortedEvents = allEvents.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
-// Latest event
-const latestEvent = sortedEvents[0];
-// Latest event with a poster for visual display
-const latestEventWithPoster = sortedEvents.find((e) => e.data.poster);
+const featuredEvents = sortedEvents.filter((event) => event.data.poster).slice(0, 6);
 
 // Stats
 const articleCount = allArticles.filter((a) => !a.data.draft).length;
@@ -49,6 +47,32 @@ const sections = [
   title={t('site.name')}
   description={t('site.description')}
 >
+
+  <!-- ═══ EVENTS FIRST ═══ -->
+  <section class="reveal mb-20">
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">
+          Agents 特区 · 线上现场
+        </p>
+        <h1 class="font-serif text-4xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-5xl">
+          真正在做 AI 的人，来这里把话说透
+        </h1>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+          每期围绕一个真实问题展开。没有产品宣讲，留下实践者的判断、争论和踩坑记录。
+        </p>
+      </div>
+      <a href={localePath(lang, '/events')} class="group inline-flex shrink-0 items-center gap-2 text-sm font-medium text-[var(--color-accent)]">
+        查看全部活动
+        <span class="transition-transform group-hover:translate-x-1">→</span>
+      </a>
+    </div>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {featuredEvents.map((event) => <EventCard event={event} />)}
+    </div>
+  </section>
+
+  <div class="mb-12 border-t border-[var(--color-surface-border)]"></div>
 
   <!-- ═══ HERO ═══ -->
   <section class="reveal hero-bg-grid relative min-h-[72vh] flex items-center pt-16 pb-24 overflow-hidden -mx-6 px-6 rounded-2xl mb-8">
@@ -354,91 +378,6 @@ const sections = [
 
   <!-- Divider -->
   <div class="border-t border-[var(--color-surface-border)] mb-12"></div>
-
-  <!-- ═══ LATEST EVENT ═══ -->
-  {latestEvent && (
-    <section class="reveal mb-20">
-      <div class="flex items-baseline justify-between mb-6">
-        <h2 class="font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
-          {t('nav.events')}
-        </h2>
-        <a href={localePath(lang, '/events')} class="group inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors">
-          {t('home.view.all')}
-          <span class="transition-transform group-hover:translate-x-0.5">→</span>
-        </a>
-      </div>
-      <a
-        href={localePath(lang, `/events/${latestEvent.id}`)}
-        class="group relative flex flex-col sm:flex-row gap-0 rounded-2xl border border-[var(--color-surface-border)] overflow-hidden hover:border-[var(--color-accent)]/50 transition-all hover:shadow-lg"
-      >
-        {/* Content — left, primary */}
-        <div class="flex-1 min-w-0 p-8 flex flex-col justify-between">
-          <div>
-            <div class="flex flex-wrap items-center gap-2 mb-5">
-              <span class="inline-block rounded-full bg-gradient-to-r from-[var(--color-accent)] to-orange-400 px-3 py-1 text-xs font-semibold text-white">
-                {t('event.episode', { n: latestEvent.data.number })}
-              </span>
-              <span class="text-xs text-[var(--color-text-muted)]">
-                {new Date(latestEvent.data.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </span>
-              <span class="text-xs font-semibold text-[var(--color-accent)] border border-[var(--color-accent)]/30 rounded-full px-2 py-0.5">最新</span>
-            </div>
-            <h3 class="font-serif text-2xl sm:text-3xl font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">
-              {latestEvent.data.title}
-            </h3>
-            <p class="mt-4 text-base text-[var(--color-text-secondary)] leading-relaxed">
-              {latestEvent.data.description}
-            </p>
-          </div>
-          <div class="mt-8 space-y-4">
-            {latestEvent.data.speakers && latestEvent.data.speakers.length > 0 && (
-              <div class="flex items-center gap-3">
-                <span class="text-xs text-[var(--color-text-muted)] shrink-0">分享嘉宾</span>
-                <div class="flex flex-wrap gap-2">
-                  {latestEvent.data.speakers.map((speaker) => (
-                    <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-alt)] px-3 py-1 text-sm font-medium text-[var(--color-text-primary)]">
-                      <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
-                      {speaker}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {latestEvent.data.tags && latestEvent.data.tags.length > 0 && (
-              <div class="flex items-center gap-3">
-                <span class="text-xs text-[var(--color-text-muted)] shrink-0">话题标签</span>
-                <div class="flex flex-wrap gap-1.5">
-                  {latestEvent.data.tags.slice(0, 4).map((tag) => (
-                    <span class="text-xs text-[var(--color-text-muted)] bg-[var(--color-surface-alt)] border border-[var(--color-surface-border)] rounded-md px-2 py-0.5">#{tag}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div class="pt-2 flex items-center gap-2 text-sm font-medium text-[var(--color-accent)]">
-              查看详情
-              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-        {/* Poster — right, fixed width, full height */}
-        {latestEventWithPoster?.data.poster && (
-          <div class="shrink-0 sm:w-48 md:w-56 overflow-hidden bg-[var(--color-surface-alt)]">
-            <img
-              src={latestEventWithPoster.data.poster}
-              alt={latestEventWithPoster.data.title}
-              width="224"
-              height="400"
-              loading="lazy"
-              decoding="async"
-              class="h-48 sm:h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-            />
-          </div>
-        )}
-      </a>
-    </section>
-  )}
 
   <!-- ═══ LATEST ARTICLES ═══ -->
   <section class="reveal mb-20">

@@ -20,7 +20,9 @@ const formattedDate = new Date(date).toLocaleDateString(dateLocale, {
 });
 
 const eventHref = localePath(lang, `/events/${event.id}`);
-const episodeLabel = t('event.episode', { n: number });
+const episodeLabel = number
+  ? t('event.episode', { n: number })
+  : (lang === 'en' ? 'Online event' : '线上活动');
 ---
 
 <article class="group rounded-xl border border-[var(--color-surface-border)] overflow-hidden glow-hover transition-all">
@@ -39,7 +41,7 @@ const episodeLabel = t('event.episode', { n: number });
       </div>
     ) : (
       <div class="aspect-[3/4] flex items-center justify-center bg-gradient-to-br from-[var(--color-primary-600)] via-[var(--color-primary-700)] to-purple-800">
-        <span class="text-5xl font-bold text-white/30">#{number}</span>
+        <span class="text-5xl font-bold text-white/30">{number ? `#${number}` : '活动'}</span>
       </div>
     )}
   </a>

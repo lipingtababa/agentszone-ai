@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <rect width="1080" height="1440" fill="#e8e3d8"/>
+  <g fill="none" stroke="#777268" stroke-width="2" opacity=".65"><path d="M0 220h1080M0 1210h1080M90 330h900v690H90z"/><path d="M90 430h900M90 530h900M90 630h900M90 730h900M90 830h900M90 930h900M210 330v690M330 330v690M450 330v690M570 330v690M690 330v690M810 330v690M930 330v690"/></g>
+  <rect x="90" y="690" width="900" height="330" fill="#17202a"/>
+  <text x="72" y="120" fill="#a34428" font-family="Arial,'Noto Sans SC',sans-serif" font-size="30" font-weight="700" letter-spacing="5">AGENTS 特区 · 第 19 期</text>
+  <text x="90" y="470" fill="#171717" font-family="Georgia,'Noto Serif SC',serif" font-size="130" font-weight="700">向土木</text>
+  <text x="90" y="610" fill="#171717" font-family="Georgia,'Noto Serif SC',serif" font-size="130" font-weight="700">学工程</text>
+  <text x="135" y="810" fill="#f5f2ea" font-family="Arial,'Noto Sans SC',sans-serif" font-size="37">质量控制 · 验收机制 · 变更管理</text>
+  <text x="135" y="885" fill="#c9c5bc" font-family="Arial,'Noto Sans SC',sans-serif" font-size="32">土木工程的经验，如何进入 AI 开发</text>
+  <text x="90" y="1160" fill="#a34428" font-family="Arial,'Noto Sans SC',sans-serif" font-size="28" letter-spacing="4">分享人</text>
+  <text x="90" y="1270" fill="#171717" font-family="Georgia,'Noto Serif SC',serif" font-size="58" font-weight="700">李雪涛</text>
+  <text x="990" y="1340" text-anchor="end" fill="#68635b" font-family="Arial,sans-serif" font-size="26">2026.02.10</text>
+</svg>

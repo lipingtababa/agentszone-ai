@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <rect width="1080" height="1440" fill="#151827"/>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e66845"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
+  <rect x="64" y="64" width="952" height="1312" rx="8" fill="none" stroke="#3b3f58" stroke-width="2"/>
+  <path d="M710 470l220 125-220 125z" fill="url(#g)" opacity=".9"/>
+  <g stroke="#464b68" stroke-width="2"><path d="M80 900h920M80 950h920M80 1000h920"/><path d="M190 880v140M380 880v140M650 880v140M860 880v140"/></g>
+  <text x="90" y="135" fill="#ef8062" font-family="Arial,'Noto Sans SC',sans-serif" font-size="30" font-weight="700" letter-spacing="5">AGENTS 特区 · 第 13 期</text>
+  <text x="90" y="405" fill="#fff" font-family="Georgia,'Noto Serif SC',serif" font-size="138" font-weight="700">AI 视频剪辑</text>
+  <text x="95" y="530" fill="#c6c8d6" font-family="Arial,'Noto Sans SC',sans-serif" font-size="38">技术怎么接住创作者的真实需求？</text>
+  <text x="90" y="1140" fill="#ef8062" font-family="Arial,'Noto Sans SC',sans-serif" font-size="28" letter-spacing="4">分享人</text>
+  <text x="90" y="1220" fill="#fff" font-family="Georgia,'Noto Serif SC',serif" font-size="58" font-weight="700">Violet × 王欢</text>
+  <text x="990" y="1325" text-anchor="end" fill="#8d91a8" font-family="Arial,sans-serif" font-size="26">2026.01.25</text>
+</svg>
