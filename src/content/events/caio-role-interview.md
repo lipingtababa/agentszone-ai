@@ -3,7 +3,7 @@ title: 首席 AI 官，这是个什么新岗位？
 description: 一位新任 CAIO 分享上任现场，讨论首席 AI 官的职责边界、能力模型、团队形态、与 CTO 的协作方式，以及 AI 转型预算从哪里来、投向哪里。
 date: 2026-09-08
 speakers: [匿名 CAIO, 马驰]
-poster: /images/events/caio-role-interview.svg
+poster: /images/events/caio-role-interview.png
 tags: [caio, ai-transformation, leadership, organization]
 ---
 
